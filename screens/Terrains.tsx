@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { SafeAreaView, ScrollView, StyleSheet } from 'react-native';
 import { Background } from '../components/Background';
 
@@ -7,10 +8,10 @@ import { BigBox } from '../components/Terrains/BigBox';
 import { Box } from '../components/Terrains/Box';
 import { Title } from '../components/Texts/Title';
 import { Text, View } from '../components/Themed';
-import Layout from '../constants/Layout';
 import { RootTabScreenProps } from '../types';
 
 export default function TabOneScreen({ navigation }: RootTabScreenProps<'Terrains'>) {
+
   return (
     <View style={styles.container}>
       <Background />
@@ -43,7 +44,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'flex-start',
     alignItems: 'center',
-    paddingTop: 150,
+    paddingTop: 225,
   },
   scrollView: {
     marginTop: 25,

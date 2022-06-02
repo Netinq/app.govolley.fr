@@ -1,5 +1,6 @@
 import { Component, ElementType, PropsWithChildren, ReactPropTypes } from "react";
-import { ImageBackground } from "react-native";
+import { ImageBackground, StyleSheet } from "react-native";
+import Layout from "../constants/Layout";
 
 export class Background extends Component{
   
@@ -7,9 +8,18 @@ export class Background extends Component{
     
     const image = require('../assets/images/background.jpg');
     
-    return (<ImageBackground source={image} resizeMode="cover" style={{ justifyContent: "center" }}>
-          {this.props.children}
-        </ImageBackground>
+    return (<ImageBackground source={image} resizeMode="cover" style={this.styles.style}></ImageBackground>
     );
   }
+
+  styles = StyleSheet.create({
+    style: {
+      justifyContent: 'center',
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      width: Layout.window.width,
+      height: Layout.window.height
+    }
+  })
 }
