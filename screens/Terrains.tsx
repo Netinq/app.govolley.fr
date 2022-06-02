@@ -1,4 +1,5 @@
 import { SafeAreaView, ScrollView, StyleSheet } from 'react-native';
+import { Background } from '../components/Background';
 
 import EditScreenInfo from '../components/EditScreenInfo';
 import { Header } from '../components/Header';
@@ -12,6 +13,7 @@ import { RootTabScreenProps } from '../types';
 export default function TabOneScreen({ navigation }: RootTabScreenProps<'Terrains'>) {
   return (
     <View style={styles.container}>
+      <Background>
       <Header></Header>
       <ScrollView>
       <Title title='Proche de vous'></Title>
@@ -31,6 +33,7 @@ export default function TabOneScreen({ navigation }: RootTabScreenProps<'Terrain
           <BigBox id='test' distance={15} note={4.5} tags={['2 Terrains', 'Beach']} ></BigBox>
         </View>
         </ScrollView>
+      </Background>
     </View>
   );
 }
