@@ -16,7 +16,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 50,
     flexDirection: "row",
     justifyContent: 'space-between',
-    alignItems: 'center'
+    alignItems: 'center',
+    backgroundColor: 'transparent'
   },
   logo: {
     height: 75,

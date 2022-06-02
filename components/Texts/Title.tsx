@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
   content: {
     paddingLeft: 35,
     width: Layout.window.width,
-    backgroundColor: '#F5F5F5'
+    backgroundColor: 'transparent'
   },
   text: {
     fontFamily: 'calibri-bold',
