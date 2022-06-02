@@ -3,7 +3,7 @@ import { Image, StyleSheet, View } from "react-native";
 export function Header() {
   return (
     <View style={styles.header}>
-      <Image style={styles.logo} source={require('../assets/images/icon.png')} />
+      <Image style={styles.logo} source={require('../assets/images/favicon.png')} />
     </View>
   )
 }
