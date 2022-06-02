@@ -17,10 +17,15 @@ const linking: LinkingOptions<RootStackParamList> = {
         screens: {
           TabOne: {
             screens: {
-              TabOneScreen: 'one',
+              Terrains: 'one',
             },
           },
           TabTwo: {
+            screens: {
+              TabTwoScreen: 'two',
+            },
+          },
+          TabThree: {
             screens: {
               TabTwoScreen: 'two',
             },

@@ -4,26 +4,27 @@
  *
  */
 import { FontAwesome } from '@expo/vector-icons';
+import { FontAwesome5 } from '@expo/vector-icons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import * as React from 'react';
-import { ColorSchemeName, Pressable } from 'react-native';
+import { ColorSchemeName, Pressable, StyleSheet, Text, TouchableOpacity } from 'react-native';
 
 import Colors from '../constants/Colors';
 import useColorScheme from '../hooks/useColorScheme';
 import ModalScreen from '../screens/ModalScreen';
 import NotFoundScreen from '../screens/NotFoundScreen';
-import TabOneScreen from '../screens/TabOneScreen';
+import Terrains from '../screens/Terrains';
 import TabTwoScreen from '../screens/TabTwoScreen';
 import { RootStackParamList, RootTabParamList, RootTabScreenProps } from '../types';
 import LinkingConfiguration from './LinkingConfiguration';
+import { View } from '../components/Themed';
 
-export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
+export default function Navigation() {
   return (
     <NavigationContainer
-      linking={LinkingConfiguration}
-      theme={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+      linking={LinkingConfiguration}>
       <RootNavigator />
     </NavigationContainer>
   );
@@ -54,54 +55,100 @@ function RootNavigator() {
 const BottomTab = createBottomTabNavigator<RootTabParamList>();
 
 function BottomTabNavigator() {
-  const colorScheme = useColorScheme();
 
   return (
     <BottomTab.Navigator
-      initialRouteName="TabOne"
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme].tint,
-      }}>
+        tabBarStyle: {
+          backgroundColor: '#FFFFFF',
+          borderTopLeftRadius: 25,
+          borderTopRightRadius: 25,
+          justifyContent: 'center',
+          height: 75,
+          position: 'absolute',
+          bottom: 0,
+          left: 0, 
+          right: 0
+        },
+        tabBarButton: props => <TouchableOpacity {...props} />
+      }}
+      >
       <BottomTab.Screen
-        name="TabOne"
-        component={TabOneScreen}
-        options={({ navigation }: RootTabScreenProps<'TabOne'>) => ({
-          title: 'Tab One',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
-          headerRight: () => (
-            <Pressable
-              onPress={() => navigation.navigate('Modal')}
-              style={({ pressed }) => ({
-                opacity: pressed ? 0.5 : 1,
-              })}>
-              <FontAwesome
-                name="info-circle"
-                size={25}
-                color={Colors[colorScheme].text}
-                style={{ marginRight: 15 }}
-              />
-            </Pressable>
-          ),
+        name='Terrains'
+        component={Terrains}
+        options={({ navigation }: RootTabScreenProps<'Terrains'>) => ({
+          headerShown: false, 
+          tabBarShowLabel: false,
+          tabBarIcon: () => <TabBarIcon title="Terrains" name="volleyball-ball" color="#C9C9C9" />,
         })}
       />
       <BottomTab.Screen
-        name="TabTwo"
+        name="Ajouter"
         component={TabTwoScreen}
         options={{
-          title: 'Tab Two',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          headerShown: false, 
+          tabBarShowLabel: false,
+          tabBarIcon: () => <TabBarIcon center={true} title="Ajouter" name="plus" color="#ffffff" />,
+        }}
+      />
+      <BottomTab.Screen
+        name="Tournois"
+        component={TabTwoScreen}
+        options={{
+          headerShown: false, 
+          tabBarShowLabel: false,
+          title: 'Tournois', 
+          tabBarIcon: () => <TabBarIcon title="Tournois" name="trophy" color="#C9C9C9" />,
         }}
       />
     </BottomTab.Navigator>
   );
 }
 
-/**
- * You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
- */
 function TabBarIcon(props: {
-  name: React.ComponentProps<typeof FontAwesome>['name'];
+  name: React.ComponentProps<typeof FontAwesome5>['name'];
   color: string;
+  title: string;
+  center?: boolean;
 }) {
-  return <FontAwesome size={30} style={{ marginBottom: -3 }} {...props} />;
+  return (
+    <View
+      style={props['center'] ? TabBarIconStyle.barCenter : TabBarIconStyle.bar}>
+      <FontAwesome5 size={30} style={{ marginTop: -3 }} {...props} />
+      <Text style={props['center'] ? TabBarIconStyle.barCenterText : TabBarIconStyle.barText}>{props['title']}</Text>
+    </View>
+  );
 }
+
+const TabBarIconStyle = StyleSheet.create({
+  bar: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#ffffff',
+  },
+  barText: {
+    fontFamily: 'franklin-gothic',
+    fontSize: 10,
+    textTransform: 'uppercase',
+    color: "#C9C9C9",
+    marginTop: 3
+  },
+  barCenter: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#FCB040',
+    borderTopLeftRadius: 15,
+    borderBottomLeftRadius: 15,
+    borderBottomRightRadius: 15,
+    height: 65,
+    width: 65
+  },
+  barCenterText: {
+    fontFamily: 'franklin-gothic',
+    fontSize: 10,
+    textTransform: 'uppercase',
+    color: "#FFFFFF",
+    marginTop: 3
+  },
+})

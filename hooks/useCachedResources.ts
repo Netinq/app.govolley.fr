@@ -16,6 +16,10 @@ export default function useCachedResources() {
         await Font.loadAsync({
           ...FontAwesome.font,
           'space-mono': require('../assets/fonts/SpaceMono-Regular.ttf'),
+          'franklin-gothic': require('../assets/fonts/FranklinGothic.ttf'),
+          'franklin-gothic-medium': require('../assets/fonts/FranklinGothicMedium.ttf'),
+          'calibri': require('../assets/fonts/CalibriRegular.ttf'),
+          'calibri-bold': require('../assets/fonts/CalibriBold.ttf'),
         });
       } catch (e) {
         // We might want to provide this error information to an error reporting service
