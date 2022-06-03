@@ -20,11 +20,11 @@ const linking: LinkingOptions<RootStackParamList> = {
               Terrains: 'one',
             },
           },
-          TerrainPage: {
-            screens: {
-              TerrainPage: 'two',
-            },
-          },
+        },
+      },
+      TerrainPage: {
+        screens: {
+          TerrainPage: 'two',
         },
       },
       Modal: 'modal',
