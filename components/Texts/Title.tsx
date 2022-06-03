@@ -1,13 +1,14 @@
-import { StyleSheet, Text } from "react-native";
+import { StyleSheet, Text, ViewStyle } from "react-native";
 import Layout from "../../constants/Layout";
 import { View } from "../Themed";
 
 export function Title( props: {
   title: string;
+  style?: ViewStyle;
 }) {
   
   return (
-    <View style={styles.content}>
+    <View style={[styles.content, props['style']]}>
       <Text style={styles.text}>{props['title']}</Text>
       <View style={styles.separator}></View>
     </View>
