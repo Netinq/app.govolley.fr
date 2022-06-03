@@ -12,12 +12,14 @@ import { RootTabScreenProps } from '../types';
 
 export default function TabOneScreen({ navigation }: RootTabScreenProps<'Terrains'>) {
 
+  const [isScrolled, setScrolled] = useState(false);
+
   return (
     <View style={styles.container}>
       <Background />
       <Header />
-      <ScrollView>
-      <Title title='Proche de vous'></Title>
+      <ScrollView onScroll={({nativeEvent}) => nativeEvent.contentOffset.y >= 5 ? setScrolled(true) : setScrolled(false)}>
+      <Title title='Proche de vous' style={{marginTop: 25}}></Title>
         <ScrollView showsHorizontalScrollIndicator={false} style={styles.scrollView} horizontal={true}>
           <View style={styles.spacer}></View>
           <Box id='test' distance={15} note={4.5} tags={['2 Terrains', 'Beach']} ></Box>
@@ -44,7 +46,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'flex-start',
     alignItems: 'center',
-    paddingTop: 225,
+    paddingTop: 200,
   },
   scrollView: {
     marginTop: 25,
