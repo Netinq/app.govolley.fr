@@ -10,7 +10,7 @@ import { Title } from '../components/Texts/Title';
 import { Text, View } from '../components/Themed';
 import { RootTabScreenProps } from '../types';
 
-export default function TabOneScreen({ navigation }: RootTabScreenProps<'Terrains'>) {
+export default function Terrain({ navigation }: RootTabScreenProps<'Terrains'>) {
 
   const [isScrolled, setScrolled] = useState(false);
 
@@ -22,10 +22,10 @@ export default function TabOneScreen({ navigation }: RootTabScreenProps<'Terrain
       <Title title='Proche de vous' style={{marginTop: 25}}></Title>
         <ScrollView showsHorizontalScrollIndicator={false} style={styles.scrollView} horizontal={true}>
           <View style={styles.spacer}></View>
-          <Box id='test' distance={15} note={4.5} tags={['2 Terrains', 'Beach']} ></Box>
-          <Box id='test' distance={15} note={4.5} tags={['2 Terrains', 'Beach']} ></Box>
-          <Box id='test' distance={15} note={4.5} tags={['2 Terrains', 'Beach']} ></Box>
-          <Box id='test' distance={15} note={4.5} tags={['2 Terrains', 'Beach']} ></Box>
+          <Box navigation={navigation} id='test' distance={15} note={4.5} tags={['2 Terrains', 'Beach']} ></Box>
+          <Box navigation={navigation} id='test' distance={15} note={4.5} tags={['2 Terrains', 'Beach']} ></Box>
+          <Box navigation={navigation} id='test' distance={15} note={4.5} tags={['2 Terrains', 'Beach']} ></Box>
+          <Box navigation={navigation} id='test' distance={15} note={4.5} tags={['2 Terrains', 'Beach']} ></Box>
           <View style={styles.spacer}></View>
         </ScrollView>
         <Title title='Tous les terrains'></Title>
