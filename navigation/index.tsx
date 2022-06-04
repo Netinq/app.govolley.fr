@@ -3,26 +3,27 @@
  * https://reactnavigation.org/docs/getting-started
  *
  */
-import { FontAwesome } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import * as React from 'react';
-import { ColorSchemeName, Pressable, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity } from 'react-native';
+import * as SecureStore from 'expo-secure-store'
 
-import Colors from '../constants/Colors';
-import useColorScheme from '../hooks/useColorScheme';
 import ModalScreen from '../screens/ModalScreen';
 import NotFoundScreen from '../screens/NotFoundScreen';
 import Terrains from '../screens/Terrains';
 import TabTwoScreen from '../screens/TabTwoScreen';
-import { RootStackParamList, RootTabParamList, RootTabScreenProps } from '../types';
+import { QuizzTabParamList, RootStackParamList, RootTabParamList, RootTabScreenProps } from '../types';
 import LinkingConfiguration from './LinkingConfiguration';
 import { View } from '../components/Themed';
 import Page from '../screens/Terrain/Page';
+import Step1 from '../screens/Quizz/Step1';
+import Step2 from '../screens/Quizz/Step2';
 
 export default function Navigation() {
+
   return (
     <NavigationContainer
       linking={LinkingConfiguration}>
@@ -37,9 +38,27 @@ export default function Navigation() {
  */
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
+
 function RootNavigator() {
-  return (
+
+  const [isLoadingComplete, setLoadingComplete] = React.useState(false);
+  const [isRegistered, setRegistered] = React.useState(false);
+
+  React.useEffect(() => {
+    async function isRegister() {
+      try {
+        if (await SecureStore.getItemAsync('isRegistered')) setRegistered(true);
+      } finally {
+        setLoadingComplete(true)
+      }
+    }
+    isRegister()
+  }, []);
+
+  if (!isLoadingComplete) return null
+  else return (
     <Stack.Navigator>
+      {(!isRegistered && (<Stack.Screen name="Quizz" component={QuizzNavigator} options={{ headerShown: false }} />))}
       <Stack.Screen name="Root" component={BottomTabNavigator} options={{ headerShown: false }} />
       <Stack.Screen name="TerrainPage" component={Page} options={{ headerShown: false }} />
       <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: 'Oops!' }} />
@@ -53,7 +72,21 @@ function RootNavigator() {
 /**
  * A bottom tab navigator displays tab buttons on the bottom of the display to switch screens.
  * https://reactnavigation.org/docs/bottom-tab-navigator
- */
+*/
+
+const QuizzStack = createNativeStackNavigator<QuizzTabParamList>();
+
+function QuizzNavigator() {
+
+  return (
+    <QuizzStack.Navigator>
+      <QuizzStack.Screen name='Step1' component={Step1} options={{headerShown: false}} />
+      <QuizzStack.Screen name='Step2' component={Step2} options={{headerShown: false}} />
+    </QuizzStack.Navigator>
+  )
+
+}
+
 const BottomTab = createBottomTabNavigator<RootTabParamList>();
 
 function BottomTabNavigator() {
