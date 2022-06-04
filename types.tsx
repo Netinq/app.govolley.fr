@@ -15,7 +15,9 @@ declare global {
 
 export type RootStackParamList = {
   Root: NavigatorScreenParams<RootTabParamList> | undefined;
+  Quizz: NavigatorScreenParams<QuizzTabParamList> | undefined;
   Modal: undefined;
+  TerrainPage: undefined;
   NotFound: undefined;
 };
 
@@ -26,12 +28,23 @@ export type RootStackScreenProps<Screen extends keyof RootStackParamList> = Nati
 
 export type RootTabParamList = {
   Terrains: undefined;
-  TerrainPage: undefined;
   Ajouter: undefined;
   Tournois: undefined;
 };
 
 export type RootTabScreenProps<Screen extends keyof RootTabParamList> = CompositeScreenProps<
   BottomTabScreenProps<RootTabParamList, Screen>,
+  NativeStackScreenProps<RootStackParamList>
+>;
+
+export type QuizzTabParamList = {
+  Step1: undefined,
+  Step2: undefined,
+  Step3: undefined,
+  Step4: undefined,
+};
+
+export type QuizzTabScreenProps<Screen extends keyof QuizzTabParamList> = CompositeScreenProps<
+  BottomTabScreenProps<QuizzTabParamList, Screen>,
   NativeStackScreenProps<RootStackParamList>
 >;
