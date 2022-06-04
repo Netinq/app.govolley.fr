@@ -5,12 +5,13 @@ import { View } from "../Themed";
 export function Title( props: {
   title: string;
   style?: ViewStyle;
+  big?: boolean,
 }) {
   
   return (
-    <View style={[styles.content, props['style']]}>
-      <Text style={styles.text}>{props['title']}</Text>
-      <View style={styles.separator}></View>
+    <View style={[styles.content, props.style]}>
+      <Text style={props.big ? styles.textBig : styles.text}>{props.title}</Text>
+      <View style={props.big ? styles.separatorBig : styles.separator}></View>
     </View>
   )
 }
@@ -26,9 +27,20 @@ const styles = StyleSheet.create({
     fontSize: 25,
     color: '#353535'
   },
+  textBig: {
+    fontFamily: 'calibri-bold',
+    fontSize: 35,
+    color: '#353535'
+  },
   separator: {
     height: 8,
     width: 50,
+    backgroundColor: '#FCB040',
+    borderRadius: 4
+  },
+  separatorBig: {
+    height: 8,
+    width: 75,
     backgroundColor: '#FCB040',
     borderRadius: 4
   }
