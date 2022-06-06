@@ -1,12 +1,17 @@
 import { Component } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { Image, StyleSheet, Text, View } from "react-native";
 
-export default class Chat extends Component {
+type Props = {
+  icon?: boolean
+}
+
+export default class Chat extends Component<Props> {
 
   render() {
 
     return (
       <View style={this.styles.chat}>
+        {this.props.icon && <Image style={this.styles.robot} source={require('../../assets/images/favicon.png')} />}
         <Text style={this.styles.text}>{this.props.children}</Text>
       </View>
     )
@@ -27,6 +32,14 @@ export default class Chat extends Component {
       fontFamily: 'franklin-gothic-medium',
       fontSize: 18,
       color: '#353535'
+    },
+    robot: {
+      position: 'absolute',
+      top: -15,
+      left: -25,
+      height: 50,
+      width: 50,
+      zIndex: 100
     }
   })
 
