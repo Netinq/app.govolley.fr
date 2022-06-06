@@ -17,6 +17,8 @@ type Props = {
 
 export default class Step1 extends Component<Props> {
   
+  navigate = () => { this.props.navigation.navigate('Quizz', { screen: 'Step2' }); }
+
   render() {
     return (
       <View style={this.styles.container}>
@@ -26,8 +28,8 @@ export default class Step1 extends Component<Props> {
         </View>
         <Title title='Bienvenue' style={{ marginTop: 25 }} big={true}></Title>
         <ChatBox style={{ marginTop: 25 }}>
-          <Chat>Salut ! J'aurai quelques questions rapides à te poser !</Chat>
-          <Button text='Allons-y' navigation={this.props.navigation} goTo='Quizz' screen='Step2' />
+          <Chat icon={true}>Salut ! J'aurai quelques questions rapides à te poser !</Chat>
+          <Button text='Allons-y' onPress={this.navigate} />
         </ChatBox>
       </View>
     );
