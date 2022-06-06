@@ -21,6 +21,8 @@ import { View } from '../components/Themed';
 import Page from '../screens/Terrain/Page';
 import Step1 from '../screens/Quizz/Step1';
 import Step2 from '../screens/Quizz/Step2';
+import Step3 from '../screens/Quizz/Step3';
+import Step4 from '../screens/Quizz/Step4';
 
 export default function Navigation() {
 
@@ -82,6 +84,8 @@ function QuizzNavigator() {
     <QuizzStack.Navigator>
       <QuizzStack.Screen name='Step1' component={Step1} options={{headerShown: false}} />
       <QuizzStack.Screen name='Step2' component={Step2} options={{headerShown: false}} />
+      <QuizzStack.Screen name='Step3' component={Step3} options={{headerShown: false}} />
+      <QuizzStack.Screen name='Step4' component={Step4} options={{headerShown: false}} />
     </QuizzStack.Navigator>
   )
 
