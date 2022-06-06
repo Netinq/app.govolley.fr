@@ -15,16 +15,16 @@ const linking: LinkingOptions<RootStackParamList> = {
     screens: {
       Root: {
         screens: {
-          Terrains: {
-            screens: {
-              Terrains: 'one',
-            },
-          },
+          Terrains: '/'
         },
       },
-      TerrainPage: {
+      TerrainPage: '/terrainpage',
+      Quizz: {
         screens: {
-          TerrainPage: 'two',
+          Step1: '/quizz/step1',
+          Step2: '/quizz/step2',
+          Step3: '/quizz/step3',
+          Step4: '/quizz/step4'
         },
       },
       Modal: 'modal',
