@@ -22,7 +22,6 @@ import Page from '../screens/Terrain/Page';
 import Step1 from '../screens/Quizz/Step1';
 import Step2 from '../screens/Quizz/Step2';
 import Step3 from '../screens/Quizz/Step3';
-import Step4 from '../screens/Quizz/Step4';
 
 export default function Navigation() {
 
@@ -85,7 +84,6 @@ function QuizzNavigator() {
       <QuizzStack.Screen name='Step1' component={Step1} options={{headerShown: false}} />
       <QuizzStack.Screen name='Step2' component={Step2} options={{headerShown: false}} />
       <QuizzStack.Screen name='Step3' component={Step3} options={{headerShown: false}} />
-      <QuizzStack.Screen name='Step4' component={Step4} options={{headerShown: false}} />
     </QuizzStack.Navigator>
   )
 
@@ -109,7 +107,9 @@ function BottomTabNavigator() {
           left: 0, 
           right: 0
         },
-        tabBarButton: props => <TouchableOpacity {...props} />
+        tabBarButton: props => <TouchableOpacity {...props} />,
+        tabBarActiveTintColor: '#FCB040',
+        tabBarInactiveTintColor: '#C9C9C9',
       }}
       >
       <BottomTab.Screen
@@ -118,7 +118,7 @@ function BottomTabNavigator() {
         options={({ navigation }: RootTabScreenProps<'Terrains'>) => ({
           headerShown: false, 
           tabBarShowLabel: false,
-          tabBarIcon: () => <TabBarIcon title="Terrains" name="volleyball-ball" color="#C9C9C9" />,
+          tabBarIcon: ({color}) => <TabBarIcon title="Terrains" name="volleyball-ball" color={color}/>,
         })}
       />
       <BottomTab.Screen
@@ -137,7 +137,7 @@ function BottomTabNavigator() {
           headerShown: false, 
           tabBarShowLabel: false,
           title: 'Tournois', 
-          tabBarIcon: () => <TabBarIcon title="Tournois" name="trophy" color="#C9C9C9" />,
+          tabBarIcon: ({color}) => <TabBarIcon title="Tournois" name="trophy" color={color} />,
         }}
       />
     </BottomTab.Navigator>
@@ -154,7 +154,7 @@ function TabBarIcon(props: {
     <View
       style={props['center'] ? TabBarIconStyle.barCenter : TabBarIconStyle.bar}>
       <FontAwesome5 size={30} style={{ marginTop: -3 }} {...props} />
-      <Text style={props['center'] ? TabBarIconStyle.barCenterText : TabBarIconStyle.barText}>{props['title']}</Text>
+      <Text style={[props['center'] ? TabBarIconStyle.barCenterText : TabBarIconStyle.barText, {color: props.color}]}>{props['title']}</Text>
     </View>
   );
 }
@@ -170,7 +170,6 @@ const TabBarIconStyle = StyleSheet.create({
     fontFamily: 'franklin-gothic',
     fontSize: 10,
     textTransform: 'uppercase',
-    color: "#C9C9C9",
     marginTop: 3
   },
   barCenter: {
