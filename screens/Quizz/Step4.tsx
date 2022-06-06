@@ -14,19 +14,20 @@ import 'moment/locale/fr'
 import * as SecureStore from 'expo-secure-store'
 import Layout from '../../constants/Layout';
 import { DateTimePickerAndroid, DateTimePickerEvent } from '@react-native-community/datetimepicker';
+import ButtonLevel from '../../components/Chat/ButtonLevel';
 
 export default function Step3({ navigation }: QuizzTabScreenProps<'Step3'>) {
 
-  const [inputValue, setInputValue] = useState(0);
-
-  const onPress = async () => {
+  const onPress = async (level: number) => {
     let profil = await SecureStore.getItemAsync('profil')
     if (!profil) return;
 
     let json = JSON.parse(profil)
-    json.level = inputValue;
-    await SecureStore.setItemAsync('profil', JSON.stringify(json)).then(() => {
-      console.log("SUIVANT")
+    json.level = level;
+    SecureStore.setItemAsync('profil', JSON.stringify(json)).then(async () => {
+      SecureStore.setItemAsync('isRegistered', 'true').then(() => {
+        navigation.navigate('Root')
+      })
     })
   }
   
@@ -37,10 +38,14 @@ export default function Step3({ navigation }: QuizzTabScreenProps<'Step3'>) {
         <Image style={styles.logo} source={require('../../assets/images/favicon.png')} />
       </View>
       <Title title='Âge' style={{marginTop: 25}} big={true}></Title>
-      <ChatBox style={{marginTop: 25, marginBottom: (Layout.window.height/2)}}>
+      <ChatBox style={{ marginTop: 25 }}>
         <Chat icon={true}>Dans ma jeunesse je jouais à haut niveau..</Chat>
         <Chat>Comment estimerais-tu ton niveau ?</Chat>
-        <Button text="C'est bon" onPress={onPress} />
+        <View style={styles.buttonContainer}>
+          <ButtonLevel text='Fort' subText='(Amateur)' color='#74C6F6' onPress={async () => onPress(1)} />
+          <ButtonLevel text='Très fort' subText='(Confirmé)' color='#7074FF' onPress={async () => onPress(1)} />
+          <ButtonLevel text='Super fort' subText='(Compétiteur)' color='#FE5E79' onPress={async () => onPress(1)} />
+        </View>
       </ChatBox>
     </ScrollView>
   );
@@ -63,5 +68,12 @@ const styles = StyleSheet.create({
   logo: {
     height: 150,
     width: 150
+  },
+  buttonContainer: {
+    width: '100%',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    flexDirection: 'row',
+    flexWrap: 'wrap'
   }
 });
