@@ -37,7 +37,7 @@ export default function Step3({ navigation }: QuizzTabScreenProps<'Step3'>) {
       <View style={styles.top}>
         <Image style={styles.logo} source={require('../../assets/images/favicon.png')} />
       </View>
-      <Title title='Âge' style={{marginTop: 25}} big={true}></Title>
+      <Title title='Niveau' style={{marginTop: 25}} big={true}></Title>
       <ChatBox style={{ marginTop: 25 }}>
         <Chat icon={true}>Dans ma jeunesse je jouais à haut niveau..</Chat>
         <Chat>Comment estimerais-tu ton niveau ?</Chat>
