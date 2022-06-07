@@ -30,6 +30,7 @@ export default class Step1 extends Component<Props> {
         <ChatBox style={{ marginTop: 25 }}>
           <Chat icon={true}>Salut ! J'aurai quelques questions rapides à te poser !</Chat>
           <Chat>Les informations seront stockées uniquement sur ton téléphone.</Chat>
+          <Chat>Jusqu'à ce que tu décide de créer un compte.</Chat>
           <Button text='Allons-y' onPress={this.navigate} />
         </ChatBox>
       </View>
