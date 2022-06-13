@@ -3,13 +3,14 @@ import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
 import { CompositeNavigationProp } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { Component } from "react";
-import { GestureResponderEvent, StyleSheet, Text, TouchableOpacity, TouchableOpacityBase } from "react-native";
+import { ActivityIndicator, GestureResponderEvent, StyleSheet, Text, TouchableOpacity, TouchableOpacityBase } from "react-native";
 import { QuizzTabParamList, RootStackParamList } from "../../types";
 
 type Props = {
   text: string,
   onPress: (event: GestureResponderEvent) => void,
-  disable?: boolean;
+  disable?: boolean,
+  activity?: boolean
 }
 
 export default class Button extends Component<Props> {
@@ -19,10 +20,16 @@ export default class Button extends Component<Props> {
     return (
       <TouchableOpacity
         style={this.props.disable ? this.styles.button__disable : this.styles.button}
-        onPress={this.props.disable ? () => { } : this.props.onPress}
-        >
-        <Text style={this.styles.text}>{this.props.text}</Text>
-        <FontAwesome5 style={{marginLeft: 15}} size={20} color={'#fff'} name={'arrow-right'} />
+        onPress={this.props.disable || this.props.activity ? () => { } : this.props.onPress}
+      >
+        {!this.props.activity ?
+          (<>
+          <Text style={this.styles.text}>{this.props.text}</Text>
+          <FontAwesome5 style={{marginLeft: 15}} size={20} color={'#fff'} name={'arrow-right'} />
+          </>)
+          : (
+            <ActivityIndicator size={30} color="#fff" />
+          )}
       </TouchableOpacity>
     )
 
