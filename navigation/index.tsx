@@ -159,8 +159,9 @@ function RootNavigator() {
             left: 0, 
             right: 0
           },
-          tabBarHideOnKeyboard: true,
-          tabBarButton: props => <TouchableOpacity {...props} />
+          tabBarButton: props => <TouchableOpacity {...props} />,
+          tabBarActiveTintColor: '#FCB040',
+          tabBarInactiveTintColor: '#C9C9C9',
         }}
         >
         <BottomTab.Screen
@@ -169,7 +170,7 @@ function RootNavigator() {
           options={({ navigation }: RootTabScreenProps<'Terrains'>) => ({
             headerShown: false, 
             tabBarShowLabel: false,
-            tabBarIcon: () => <TabBarIcon title="Terrains" name="volleyball-ball" color="#C9C9C9" />,
+            tabBarIcon: ({color}) => <TabBarIcon title="Terrains" name="volleyball-ball" color={color}/>,
           })}
         />
         <BottomTab.Screen
@@ -188,7 +189,7 @@ function RootNavigator() {
             headerShown: false, 
             tabBarShowLabel: false,
             title: 'Tournois', 
-            tabBarIcon: () => <TabBarIcon title="Tournois" name="trophy" color="#C9C9C9" />,
+            tabBarIcon: ({color}) => <TabBarIcon title="Tournois" name="trophy" color={color} />,
           }}
         />
       </BottomTab.Navigator>
