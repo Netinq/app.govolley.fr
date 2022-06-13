@@ -50,12 +50,12 @@ function RootNavigator() {
 
   const [isLoadingComplete, setLoadingComplete] = React.useState(false);
   const [isRegistered, setRegistered] = React.useState(false);
-  const [token, setToken] = React.useState(null);
+  const [token, setToken] = React.useState("");
 
   const authContext = React.useMemo(
     () => ({
       register: (data: string) => {
-        
+
         let headers = new Headers();
         headers.append("app-token", "LKauPZ7PSJ3Ze2NQpQGMgkjqPcesnjDR");
         headers.append("Content-Type", "application/json");
@@ -101,7 +101,7 @@ function RootNavigator() {
         return;
       },
       logout: (data: string) => {
-        setToken(null)
+        setToken("")
         return;
       },
     }),
@@ -111,6 +111,7 @@ function RootNavigator() {
   React.useEffect(() => {
     async function isRegister() {
       try {
+        await SecureStore.getItemAsync('jwt').then((data) => data && setToken(data))
         if (await SecureStore.getItemAsync('isRegistered')) setRegistered(true);
       } finally {
         setLoadingComplete(true)
