@@ -222,7 +222,6 @@ function QuizzNavigator() {
       <QuizzStack.Screen name='Step1' component={Step1} options={{headerShown: false}} />
       <QuizzStack.Screen name='Step2' component={Step2} options={{headerShown: false}} />
       <QuizzStack.Screen name='Step3' component={Step3} options={{headerShown: false}} />
-      <QuizzStack.Screen name='Step4' component={Step4} options={{headerShown: false}} />
     </QuizzStack.Navigator>
   )
 
@@ -238,7 +237,6 @@ function AuthNavigator() {
       <AuthStack.Screen name='Login' component={Login} options={{headerShown: false}} />
     </AuthStack.Navigator>
   )
-
 }
 
 function TabBarIcon(props: {
@@ -251,7 +249,7 @@ function TabBarIcon(props: {
     <View
       style={props['center'] ? TabBarIconStyle.barCenter : TabBarIconStyle.bar}>
       <FontAwesome5 size={30} style={{ marginTop: -3 }} {...props} />
-      <Text style={props['center'] ? TabBarIconStyle.barCenterText : TabBarIconStyle.barText}>{props['title']}</Text>
+      <Text style={[props['center'] ? TabBarIconStyle.barCenterText : TabBarIconStyle.barText, {color: props.color}]}>{props['title']}</Text>
     </View>
   );
 }
@@ -267,7 +265,6 @@ const TabBarIconStyle = StyleSheet.create({
     fontFamily: 'franklin-gothic',
     fontSize: 10,
     textTransform: 'uppercase',
-    color: "#C9C9C9",
     marginTop: 3
   },
   barCenter: {
