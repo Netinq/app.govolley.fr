@@ -15,7 +15,7 @@ import ModalScreen from '../screens/ModalScreen';
 import NotFoundScreen from '../screens/NotFoundScreen';
 import Terrains from '../screens/Terrains';
 import TabTwoScreen from '../screens/TabTwoScreen';
-import { QuizzTabParamList, RootStackParamList, RootTabParamList, RootTabScreenProps } from '../types';
+import { AuthTabParamList, QuizzTabParamList, RootStackParamList, RootTabParamList, RootTabScreenProps, TerrainTabParamList } from '../types';
 import LinkingConfiguration from './LinkingConfiguration';
 import { View } from '../components/Themed';
 import Page from '../screens/Terrain/Page';
@@ -23,6 +23,13 @@ import Step1 from '../screens/Quizz/Step1';
 import Step2 from '../screens/Quizz/Step2';
 import Step3 from '../screens/Quizz/Step3';
 import Step4 from '../screens/Quizz/Step4';
+import Login from '../screens/Auth/Login';
+import Register from '../screens/Auth/Register';
+import Terrain from '../screens/Terrain/Page';
+import Add from '../screens/Terrain/Add';
+
+import * as Store from 'expo-secure-store'
+import { AuthContext } from '../components/Context';
 
 export default function Navigation() {
 
@@ -34,17 +41,72 @@ export default function Navigation() {
   );
 }
 
-/**
- * A root stack navigator is often used for displaying modals on top of all other content.
- * https://reactnavigation.org/docs/modal
- */
-const Stack = createNativeStackNavigator<RootStackParamList>();
-
-
 function RootNavigator() {
+
+  const Stack = createNativeStackNavigator<RootStackParamList>();
+  const TerrainStack = createNativeStackNavigator<TerrainTabParamList>();
+  const AddStack = createNativeStackNavigator<TerrainTabParamList>();
+  const BottomTab = createBottomTabNavigator<RootTabParamList>();
 
   const [isLoadingComplete, setLoadingComplete] = React.useState(false);
   const [isRegistered, setRegistered] = React.useState(false);
+  const [token, setToken] = React.useState(null);
+
+  const authContext = React.useMemo(
+    () => ({
+      register: (data: string) => {
+        
+        let headers = new Headers();
+        headers.append("app-token", "LKauPZ7PSJ3Ze2NQpQGMgkjqPcesnjDR");
+        headers.append("Content-Type", "application/json");
+
+        const options = {
+          method: 'POST',
+          headers: headers,
+          body: data
+        }
+    
+        fetch("https://dev.govolley.fr/auth/register", options)
+          .then(response => response.json())
+          .then((result) => {
+            Store.setItemAsync('jwt', JSON.stringify(result.token)).then(() => {
+              setToken(result.token)
+            })
+          })
+          .catch(error => console.log('error', error))
+        
+        return;
+      },
+      login: (data: string) => {
+        
+        let headers = new Headers();
+        headers.append("app-token", "LKauPZ7PSJ3Ze2NQpQGMgkjqPcesnjDR");
+        headers.append("Content-Type", "application/json");
+
+        const options = {
+          method: 'POST',
+          headers: headers,
+          body: data
+        }
+    
+        fetch("https://dev.govolley.fr/auth/login", options)
+          .then(response => response.json())
+          .then((result) => {
+            Store.setItemAsync('jwt', JSON.stringify(result.token)).then(() => {
+              setToken(result.token)
+            })
+          })
+          .catch(error => console.log('error', error))
+        
+        return;
+      },
+      logout: (data: string) => {
+        setToken(null)
+        return;
+      },
+    }),
+    []
+  );
 
   React.useEffect(() => {
     async function isRegister() {
@@ -57,24 +119,99 @@ function RootNavigator() {
     isRegister()
   }, []);
 
+  const TerrainNavigator = () => {
+
+    return (
+      <TerrainStack.Navigator>
+        <TerrainStack.Screen name='Terrain' component={Terrain} options={{ headerShown: false }} />
+        <TerrainStack.Screen name='Add' component={AddNavigator} options={{ headerShown: false }} />
+        <TerrainStack.Screen name='Auth' component={AuthNavigator}  options={{ headerShown: false }} />
+      </TerrainStack.Navigator>
+    )
+  }
+  
+  const AddNavigator = () => {
+  
+    return (
+      <AddStack.Navigator>
+        {(token) ?
+        <AddStack.Screen name='Add' component={Add} options={{headerShown: false}} />
+        : (<AddStack.Screen name='Auth' component={AuthNavigator} options={{headerShown: false}} />)}
+      </AddStack.Navigator>
+    )
+  
+  }
+
+  const BottomTabNavigator = () => {
+  
+    return (
+      <BottomTab.Navigator
+        screenOptions={{
+          tabBarStyle: {
+            backgroundColor: '#FFFFFF',
+            borderTopLeftRadius: 25,
+            borderTopRightRadius: 25,
+            justifyContent: 'center',
+            height: 75,
+            position: 'absolute',
+            bottom: 0,
+            left: 0, 
+            right: 0
+          },
+          tabBarHideOnKeyboard: true,
+          tabBarButton: props => <TouchableOpacity {...props} />
+        }}
+        >
+        <BottomTab.Screen
+          name='Terrains'
+          component={Terrains}
+          options={({ navigation }: RootTabScreenProps<'Terrains'>) => ({
+            headerShown: false, 
+            tabBarShowLabel: false,
+            tabBarIcon: () => <TabBarIcon title="Terrains" name="volleyball-ball" color="#C9C9C9" />,
+          })}
+        />
+        <BottomTab.Screen
+          name="Ajouter"
+          component={AddNavigator}
+          options={{
+            headerShown: false, 
+            tabBarShowLabel: false,
+            tabBarIcon: () => <TabBarIcon center={true} title="Ajouter" name="plus" color="#ffffff" />,
+          }}
+        />
+        <BottomTab.Screen
+          name="Tournois"
+          component={TabTwoScreen}
+          options={{
+            headerShown: false, 
+            tabBarShowLabel: false,
+            title: 'Tournois', 
+            tabBarIcon: () => <TabBarIcon title="Tournois" name="trophy" color="#C9C9C9" />,
+          }}
+        />
+      </BottomTab.Navigator>
+    );
+  }
+
   if (!isLoadingComplete) return null
   else return (
-    <Stack.Navigator>
-      {(!isRegistered && (<Stack.Screen name="Quizz" component={QuizzNavigator} options={{ headerShown: false }} />))}
-      <Stack.Screen name="Root" component={BottomTabNavigator} options={{ headerShown: false }} />
-      <Stack.Screen name="TerrainPage" component={Page} options={{ headerShown: false }} />
-      <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: 'Oops!' }} />
-      <Stack.Group screenOptions={{ presentation: 'modal' }}>
-        <Stack.Screen name="Modal" component={ModalScreen} />
-      </Stack.Group>
-    </Stack.Navigator>
+    <AuthContext.Provider value={authContext}>
+      <Stack.Navigator>
+        {(!isRegistered && (<Stack.Screen name="Quizz" component={QuizzNavigator} options={{ headerShown: false }} />))}
+        <Stack.Screen name="Root" component={BottomTabNavigator} options={{ headerShown: false }} />
+        {!token && <Stack.Screen name="Auth" component={AuthNavigator} options={{ headerShown: false }} />}
+        <Stack.Screen name="Terrain" component={TerrainNavigator} options={{ headerShown: false }} />
+
+        <Stack.Screen name="TerrainPage" component={Page} options={{ headerShown: false }} />
+        <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: 'Oops!' }} />
+        <Stack.Group screenOptions={{ presentation: 'modal' }}>
+          <Stack.Screen name="Modal" component={ModalScreen} />
+        </Stack.Group>
+      </Stack.Navigator>
+    </AuthContext.Provider>
   );
 }
-
-/**
- * A bottom tab navigator displays tab buttons on the bottom of the display to switch screens.
- * https://reactnavigation.org/docs/bottom-tab-navigator
-*/
 
 const QuizzStack = createNativeStackNavigator<QuizzTabParamList>();
 
@@ -91,57 +228,17 @@ function QuizzNavigator() {
 
 }
 
-const BottomTab = createBottomTabNavigator<RootTabParamList>();
+const AuthStack = createNativeStackNavigator<AuthTabParamList>();
 
-function BottomTabNavigator() {
+function AuthNavigator() {
 
   return (
-    <BottomTab.Navigator
-      screenOptions={{
-        tabBarStyle: {
-          backgroundColor: '#FFFFFF',
-          borderTopLeftRadius: 25,
-          borderTopRightRadius: 25,
-          justifyContent: 'center',
-          height: 75,
-          position: 'absolute',
-          bottom: 0,
-          left: 0, 
-          right: 0
-        },
-        tabBarButton: props => <TouchableOpacity {...props} />
-      }}
-      >
-      <BottomTab.Screen
-        name='Terrains'
-        component={Terrains}
-        options={({ navigation }: RootTabScreenProps<'Terrains'>) => ({
-          headerShown: false, 
-          tabBarShowLabel: false,
-          tabBarIcon: () => <TabBarIcon title="Terrains" name="volleyball-ball" color="#C9C9C9" />,
-        })}
-      />
-      <BottomTab.Screen
-        name="Ajouter"
-        component={TabTwoScreen}
-        options={{
-          headerShown: false, 
-          tabBarShowLabel: false,
-          tabBarIcon: () => <TabBarIcon center={true} title="Ajouter" name="plus" color="#ffffff" />,
-        }}
-      />
-      <BottomTab.Screen
-        name="Tournois"
-        component={TabTwoScreen}
-        options={{
-          headerShown: false, 
-          tabBarShowLabel: false,
-          title: 'Tournois', 
-          tabBarIcon: () => <TabBarIcon title="Tournois" name="trophy" color="#C9C9C9" />,
-        }}
-      />
-    </BottomTab.Navigator>
-  );
+    <AuthStack.Navigator>
+      <AuthStack.Screen name='Register' component={Register} options={{headerShown: false}} />
+      <AuthStack.Screen name='Login' component={Login} options={{headerShown: false}} />
+    </AuthStack.Navigator>
+  )
+
 }
 
 function TabBarIcon(props: {
