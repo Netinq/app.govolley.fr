@@ -9,20 +9,20 @@ import { QuizzTabParamList, RootStackParamList } from "../../types";
 
 type Props = {
   text: string,
-  subText: string,
+  subText?: string,
   color: string,
   onPress: (event: GestureResponderEvent) => void,
   style?: ViewStyle,
 }
 
-export default class ButtonLevel extends Component<Props> {
+export default class ButtonColor extends Component<Props> {
 
   render() {
 
     return (
       <TouchableOpacity style={[this.styles.button, this.props.style]} onPress={this.props.onPress}>
         <Text style={this.styles.text}>{this.props.text}</Text>
-        <Text style={this.styles.subText}>{this.props.subText}</Text>
+        {this.props.subText && <Text style={this.styles.subText}>{this.props.subText}</Text>}
       </TouchableOpacity>
     )
 
