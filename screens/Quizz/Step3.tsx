@@ -35,8 +35,11 @@ export default function Step3({ navigation }: QuizzTabScreenProps<'Step3'>) {
     let profil = await SecureStore.getItemAsync('profil')
     if (!profil) return;
 
+    const currentDate = moment(bornAt);
+    moment.locale('fr')
+
     let json = JSON.parse(profil)
-    json.born = bornAt;
+    json.born = currentDate.format('YYYY-MM-DD');
     await SecureStore.setItemAsync('profil', JSON.stringify(json)).then(() => {
       navigation.navigate('Quizz', {screen: 'Step4'})
     })

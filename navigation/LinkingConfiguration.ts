@@ -27,6 +27,18 @@ const linking: LinkingOptions<RootStackParamList> = {
           Step4: '/quizz/step4'
         },
       },
+      Terrain: {
+        screens: {
+          Terrain: '/terrain/{uuid}',
+          Add: '/terrain/add'
+        }
+      },
+      Auth: {
+        screens: {
+          Login: '/auth/login',
+          Register: '/auth/register'
+        }
+      },
       Modal: 'modal',
       NotFound: '*',
     },

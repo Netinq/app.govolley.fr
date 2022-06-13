@@ -6,7 +6,8 @@ type Props = {
   setInputValue: (text: string) => void,
   placeholder: string,
   style?: ViewStyle,
-  onPress?: () => {}
+  onPress?: () => {},
+  secureTextEntry?: boolean
 }
 
 export default class ChatInput extends Component<Props> {
@@ -21,7 +22,8 @@ export default class ChatInput extends Component<Props> {
           placeholder={this.props.placeholder}
           value={this.props.inputValue}
           onChangeText={this.props.setInputValue}
-          placeholderTextColor='#E6E6E6'
+        placeholderTextColor='#E6E6E6'
+        secureTextEntry={this.props.secureTextEntry}
         />
     )
 
