@@ -1,11 +1,6 @@
-import { FontAwesome5 } from "@expo/vector-icons";
-import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
-import { CompositeNavigationProp } from "@react-navigation/native";
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { Component } from "react";
 import { GestureResponderEvent, StyleSheet, Text, TouchableOpacity, TouchableOpacityBase, ViewStyle } from "react-native";
 import Layout from "../../constants/Layout";
-import { QuizzTabParamList, RootStackParamList } from "../../types";
 
 type Props = {
   text: string,
@@ -13,6 +8,7 @@ type Props = {
   color: string,
   onPress: (event: GestureResponderEvent) => void,
   style?: ViewStyle,
+  disable?: boolean,
 }
 
 export default class ButtonColor extends Component<Props> {
@@ -20,7 +16,9 @@ export default class ButtonColor extends Component<Props> {
   render() {
 
     return (
-      <TouchableOpacity style={[this.styles.button, this.props.style]} onPress={this.props.onPress}>
+      <TouchableOpacity
+        style={this.props.disable ? this.styles.button__disable : [this.styles.button, this.props.style]}
+        onPress={this.props.disable ? () => { } : this.props.onPress}>
         <Text style={this.styles.text}>{this.props.text}</Text>
         {this.props.subText && <Text style={this.styles.subText}>{this.props.subText}</Text>}
       </TouchableOpacity>
@@ -49,7 +47,17 @@ export default class ButtonColor extends Component<Props> {
       color: '#fff',
       fontFamily: 'franklin-gothic',
       fontSize: 15
-    }
+    },
+    button__disable: {
+      flexDirection: "column",
+      justifyContent: 'center',
+      alignItems: 'center',
+      paddingVertical: 10,
+      backgroundColor: '#E6E6E6',
+      borderRadius: 15,
+      borderTopRightRadius: 0,
+      width: '45%',
+    },
   })
 
 }
