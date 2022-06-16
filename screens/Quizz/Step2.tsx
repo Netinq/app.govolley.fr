@@ -30,7 +30,7 @@ export default function Step2({ navigation }: QuizzTabScreenProps<'Step2'>) {
       <View style={styles.top}>
         <Image style={styles.logo} source={require('../../assets/images/favicon.png')} />
       </View>
-      <Title title='Pseudo' style={{marginTop: 25}} big={true}></Title>
+      <Title style={{marginTop: 25}} big={true}>Pseudo</Title>
       <ChatBox style={{marginTop: 25, marginBottom: (Layout.window.height*0.5)}}>
         <Chat icon={true}>Commençons simplement, quel pseudo veux-tu utiliser ?</Chat>
         <Chat>Trouve en un cool et fun !</Chat>

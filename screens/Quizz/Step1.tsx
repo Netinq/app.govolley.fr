@@ -26,7 +26,7 @@ export default class Step1 extends Component<Props> {
         <View style={this.styles.top}>
           <Image style={this.styles.logo} source={require('../../assets/images/favicon.png')} />
         </View>
-        <Title title='Bienvenue' style={{ marginTop: 25 }} big={true}></Title>
+        <Title style={{ marginTop: 25 }} big={true}>Bienvenue</Title>
         <ChatBox style={{ marginTop: 25 }}>
           <Chat icon={true}>Salut ! J'aurai quelques questions rapides à te poser !</Chat>
           <Chat>Les informations seront stockées uniquement sur ton téléphone.</Chat>

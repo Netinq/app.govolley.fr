@@ -12,6 +12,7 @@ import * as ImagePicker from 'expo-image-picker';
 import * as Store from 'expo-secure-store'
 import { useEffect, useState } from "react";
 import Layout from "../../../constants/Layout";
+import ButtonBox from "../../../components/Chat/ButtonBox";
 
 export default function PictureValidation({ navigation }: TerrainTabScreenProps<'PictureValidation'>) {
 
@@ -57,14 +58,14 @@ export default function PictureValidation({ navigation }: TerrainTabScreenProps<
     <View style={styles.container}>
       <Background />
       <Header onlyBack={true} backPress={cancel} customBack='annuler' />
-      <Title title='Ajouter un terrain' style={{ marginTop: 25 }} big={true}></Title>
+      <Title style={{ marginTop: 25 }} big={true}>Ajouter un terrain</Title>
       <Image source={{ uri: picture }} style={styles.picture} />
       <ChatBox style={{ marginTop: 25 }}>
         <Chat icon={true}>Est-ce que cette photo est cool ?</Chat>
-        <View style={styles.buttonContainer}>
+        <ButtonBox>
           <ButtonColor text="Pas fou..." subText="(Refaire)" color="#FE5E79" onPress={takePicture} />
           <ButtonColor text="Oui !" subText="(Valider)" color="#6EE37E" onPress={() => {}}/>
-        </View>
+        </ButtonBox>
       </ChatBox>
     </View>
   )
@@ -84,11 +85,4 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     marginTop: 25,
   },
-  buttonContainer: {
-    width: '100%',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    flexDirection: 'row',
-    flexWrap: 'wrap'
-  }
 });
