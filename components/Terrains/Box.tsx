@@ -1,5 +1,9 @@
 import { FontAwesome, FontAwesome5 } from "@expo/vector-icons";
-import { Image, StyleSheet, Text } from "react-native";
+import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
+import { CompositeNavigationProp, useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { Image, StyleSheet, Text, Touchable, TouchableOpacity } from "react-native";
+import { RootStackParamList, RootStackScreenProps, RootTabParamList } from "../../types";
 import { View } from "../Themed";
 
 export function Box(props: {
@@ -7,12 +11,14 @@ export function Box(props: {
   distance: number;
   note: number;
   id: string;
+  navigation: CompositeNavigationProp<BottomTabNavigationProp<RootTabParamList, "Terrains", undefined>, NativeStackNavigationProp<RootStackParamList>>;
 }) {
   
   const calculateDistance = props['distance'] + ' km';
+  const navigate = () => props.navigation.navigate('TerrainPage');
 
   return (
-    <View style={styles.content}>
+    <TouchableOpacity style={styles.content} onPress={navigate}>
       <View style={styles.contentImage}>
         <Image style={styles.image} source={require('../../assets/images/terrains.jpg')} />
         <View style={styles.tagContent}>
@@ -37,7 +43,7 @@ export function Box(props: {
           <Text style={styles.seeText}>Voir</Text>
         </View>
       </View>
-    </View>
+    </TouchableOpacity>
   )
 }
 
