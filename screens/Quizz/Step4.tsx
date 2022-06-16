@@ -15,6 +15,7 @@ import * as SecureStore from 'expo-secure-store'
 import Layout from '../../constants/Layout';
 import { DateTimePickerAndroid, DateTimePickerEvent } from '@react-native-community/datetimepicker';
 import ButtonColor from '../../components/Chat/ButtonColor';
+import ButtonBox from '../../components/Chat/ButtonBox';
 
 export default function Step3({ navigation }: QuizzTabScreenProps<'Step3'>) {
 
@@ -41,11 +42,11 @@ export default function Step3({ navigation }: QuizzTabScreenProps<'Step3'>) {
       <ChatBox style={{ marginTop: 25 }}>
         <Chat icon={true}>Dans ma jeunesse je jouais à haut niveau..</Chat>
         <Chat>Comment estimerais-tu ton niveau ?</Chat>
-        <View style={styles.buttonContainer}>
+        <ButtonBox>
           <ButtonColor text='Fort' subText='(Amateur)' color='#74C6F6' onPress={async () => onPress(1)} />
           <ButtonColor text='Très fort' subText='(Confirmé)' color='#7074FF' onPress={async () => onPress(1)} />
           <ButtonColor text='Super fort' subText='(Compétiteur)' color='#FE5E79' onPress={async () => onPress(1)} />
-        </View>
+        </ButtonBox>
       </ChatBox>
     </ScrollView>
   );
@@ -69,11 +70,4 @@ const styles = StyleSheet.create({
     height: 150,
     width: 150
   },
-  buttonContainer: {
-    width: '100%',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    flexDirection: 'row',
-    flexWrap: 'wrap'
-  }
 });
