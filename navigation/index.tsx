@@ -166,6 +166,7 @@ function RootNavigator() {
             left: 0, 
             right: 0
           },
+          tabBarHideOnKeyboard: true,
           tabBarButton: props => <TouchableOpacity {...props} />,
           tabBarActiveTintColor: '#FCB040',
           tabBarInactiveTintColor: '#C9C9C9',

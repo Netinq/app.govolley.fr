@@ -30,8 +30,8 @@ export function Header(
           <>
             <Image style={styles.logo} source={require('../assets/images/favicon.png')} />
             <TouchableOpacity style={styles.container}>
-              <FontAwesome size={20} color={"#fff"} name="user" />
-              <Text style={styles.barText}>profil</Text>
+              <FontAwesome size={20} color={"#fff"} name="gear" />
+              <Text style={styles.barText}>options</Text>
             </TouchableOpacity>
           </>
         }
