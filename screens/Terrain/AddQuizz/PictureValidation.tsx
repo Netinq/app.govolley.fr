@@ -57,7 +57,7 @@ export default function PictureValidation({ navigation }: TerrainTabScreenProps<
     <View style={styles.container}>
       <Background />
       <Header onlyBack={true} backPress={cancel} customBack='annuler' />
-      <Title style={{ marginTop: 25 }} big={true}>Ajouter un terrain</Title>
+      <Title title='Ajouter un terrain' style={{ marginTop: 25 }} big={true}></Title>
       <Image source={{ uri: picture }} style={styles.picture} />
       <ChatBox style={{ marginTop: 25 }}>
         <Chat icon={true}>Est-ce que cette photo est cool ?</Chat>

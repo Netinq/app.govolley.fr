@@ -42,7 +42,7 @@ export default function Login({ navigation }: AuthTabScreenProps<'Login'>) {
       <View style={styles.top}>
         <Image style={styles.logo} source={require('../../assets/images/favicon.png')} />
       </View>
-      <Title style={{ marginTop: 25 }} big={true}>Mon compte</Title>
+      <Title title='Mon compte' style={{ marginTop: 25 }} big={true}></Title>
       <ChatBox style={{marginTop: 25}}>
         <ChatInput placeholder="Mon email..." inputValue={email} setInputValue={setEmail}></ChatInput>
         <ChatInput placeholder="Mon mot de passe..." inputValue={password} setInputValue={setPassword} secureTextEntry={true}></ChatInput>

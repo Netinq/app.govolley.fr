@@ -47,7 +47,7 @@ export default function Register({ navigation }: AuthTabScreenProps<'Register'>)
       <View style={styles.top}>
         <Image style={styles.logo} source={require('../../assets/images/favicon.png')} />
       </View>
-      <Title style={{ marginTop: 25 }} big={true}>Créer un compte</Title>
+      <Title title='Créer un compte' style={{ marginTop: 25 }} big={true}></Title>
       <Subtitle>Pour accéder à certains de nos services, vous devez créer un compte utilisateur.</Subtitle>
       <ChatBox style={{marginTop: 25}}>
         <ChatInput placeholder="Mon email..." inputValue={email} setInputValue={setEmail}></ChatInput>

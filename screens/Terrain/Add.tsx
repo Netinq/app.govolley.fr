@@ -33,7 +33,7 @@ export default function Add({ navigation }: TerrainTabScreenProps<'Add'>) {
     <View style={styles.container}>
       <Background />
       <Header onlyBack={true} backPress={cancel} customBack='annuler' />
-      <Title style={{ marginTop: 25 }} big={true}>Ajouter un terrain</Title>
+      <Title title='Ajouter un terrain' style={{ marginTop: 25 }} big={true}></Title>
       <ChatBox style={{ marginTop: 25 }}>
         <Chat icon={true}>Tiens ! Je te revois enfin ? Pour ajouter un terrain c'est très simple.</Chat>
         <Chat>Veux-tu répertorier un terrain publique ou veux-tu signaler la présence de ton terrain ?</Chat>

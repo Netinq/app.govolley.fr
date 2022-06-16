@@ -1,17 +1,16 @@
-import { ReactChildren } from "react";
 import { StyleSheet, Text, ViewStyle } from "react-native";
 import Layout from "../../constants/Layout";
 import { View } from "../Themed";
 
 export function Title( props: {
+  title: string;
   style?: ViewStyle;
   big?: boolean,
-  children: string
 }) {
   
   return (
     <View style={[styles.content, props.style]}>
-      <Text style={props.big ? styles.textBig : styles.text}>{props.children}</Text>
+      <Text style={props.big ? styles.textBig : styles.text}>{props.title}</Text>
       <View style={props.big ? styles.separatorBig : styles.separator}></View>
     </View>
   )
