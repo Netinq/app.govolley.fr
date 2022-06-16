@@ -53,8 +53,10 @@ export type QuizzTabScreenProps<Screen extends keyof QuizzTabParamList> = Compos
 
 export type TerrainTabParamList = {
   Terrain: undefined;
-  Add: undefined;
   Auth: undefined;
+  Add: undefined;
+  Picture: undefined;
+  PictureValidation: undefined;
 };
   
 export type TerrainTabScreenProps<Screen extends keyof TerrainTabParamList> = CompositeScreenProps<

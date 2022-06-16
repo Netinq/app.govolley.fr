@@ -30,7 +30,13 @@ const linking: LinkingOptions<RootStackParamList> = {
       Terrain: {
         screens: {
           Terrain: '/terrain/{uuid}',
-          Add: '/terrain/add'
+          Add: {
+            screens: {
+              Add: '/terrain/add',
+              Picture: '/terrain/add/picture',
+              PictureValidation: '/terrain/add/pictureValidation'
+            }
+          }
         }
       },
       Auth: {
