@@ -68,7 +68,7 @@ export default function Step3({ navigation }: QuizzTabScreenProps<'Step3'>) {
       <View style={styles.top}>
         <Image style={styles.logo} source={require('../../assets/images/favicon.png')} />
       </View>
-      <Title title='Âge' style={{marginTop: 25}} big={true}></Title>
+      <Title style={{marginTop: 25}} big={true}>Âge</Title>
       <ChatBox style={{marginTop: 25, marginBottom: (Layout.window.height/2)}}>
         <Chat icon={true}>Hum.. {nickname}, selon moi tu est beau et jeune !</Chat>
         <Chat>Pourrais-tu me donner ton vrai âge ?</Chat>

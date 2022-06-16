@@ -41,7 +41,7 @@ export default function Picture({ navigation }: TerrainTabScreenProps<'Picture'>
     <View style={styles.container}>
       <Background />
       <Header onlyBack={true} backPress={cancel} customBack='annuler' />
-      <Title title='Ajouter un terrain' style={{ marginTop: 25 }} big={true}></Title>
+      <Title style={{ marginTop: 25 }} big={true}>Ajouter un terrain</Title>
       <ChatBox style={{ marginTop: 25 }}>
         <Chat icon={true}>Pour commencer, je t'invite à prendre une photo du terrain !</Chat>
         <Button text="Photographier" icon="camera" onPress={takePicture} />

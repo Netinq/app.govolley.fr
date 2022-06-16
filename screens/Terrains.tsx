@@ -19,7 +19,7 @@ export default function Terrain({ navigation }: RootTabScreenProps<'Terrains'>) 
       <Background />
       <Header />
       <ScrollView onScroll={({nativeEvent}) => nativeEvent.contentOffset.y >= 5 ? setScrolled(true) : setScrolled(false)}>
-      <Title title='Proche de vous' style={{marginTop: 25}}></Title>
+      <Title style={{marginTop: 25}}>Proche de vous</Title>
         <ScrollView showsHorizontalScrollIndicator={false} style={styles.scrollView} horizontal={true}>
           <View style={styles.spacer}></View>
           <Box navigation={navigation} id='test' distance={15} note={4.5} tags={['2 Terrains', 'Beach']} ></Box>
@@ -28,7 +28,7 @@ export default function Terrain({ navigation }: RootTabScreenProps<'Terrains'>) 
           <Box navigation={navigation} id='test' distance={15} note={4.5} tags={['2 Terrains', 'Beach']} ></Box>
           <View style={styles.spacer}></View>
         </ScrollView>
-        <Title title='Tous les terrains'></Title>
+        <Title>Tous les terrains</Title>
         <View style={styles.allContainter}>
           <BigBox id='test' distance={15} note={4.5} tags={['2 Terrains', 'Beach']} ></BigBox>
           <BigBox id='test' distance={15} note={4.5} tags={['2 Terrains', 'Beach']} ></BigBox>
