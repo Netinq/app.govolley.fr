@@ -10,7 +10,8 @@ type Props = {
   text: string,
   onPress: (event: GestureResponderEvent) => void,
   disable?: boolean,
-  activity?: boolean
+  activity?: boolean,
+  icon?: string,
 }
 
 export default class Button extends Component<Props> {
@@ -25,7 +26,7 @@ export default class Button extends Component<Props> {
         {!this.props.activity ?
           (<>
           <Text style={this.styles.text}>{this.props.text}</Text>
-          <FontAwesome5 style={{marginLeft: 15}} size={20} color={'#fff'} name={'arrow-right'} />
+          <FontAwesome5 style={{marginLeft: 15}} size={20} color={'#fff'} name={this.props.icon ? this.props.icon : 'arrow-right'} />
           </>)
           : (
             <ActivityIndicator size={30} color="#fff" />

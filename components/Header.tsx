@@ -4,22 +4,43 @@ import { Image, StyleSheet, Text, TouchableOpacity, TouchableOpacityBase, View }
 import Layout from "../constants/Layout";
 import { Search } from "./Search";
 
-export function Header() {
+export function Header(
+  props: {
+    back?: boolean,
+    onlyBack?: boolean,
+    backPress?: () => void,
+    customBack?: string,
+  }
+) {
 
   return (
     <View style={styles.header}>
       <View style={styles.top}>
-        <TouchableOpacity style={styles.backContainer}>
-        </TouchableOpacity> 
-        <Image style={styles.logo} source={require('../assets/images/favicon.png')} />
-        <TouchableOpacity style={styles.container}>
-          <FontAwesome size={20} color={"#fff"} name="user" />
-          <Text style={styles.barText}>profil</Text>
-        </TouchableOpacity> 
+        { (props.back || props.onlyBack) ?
+          <TouchableOpacity style={styles.backContainer} onPress={props.backPress}>
+            <FontAwesome size={20} color={"#353535"} name="arrow-left" />
+            <Text style={styles.barBackText}>{props.customBack ? props.customBack : 'retour'}</Text>
+          </TouchableOpacity>
+          :
+          <TouchableOpacity style={styles.backContainerEmpty}>
+          </TouchableOpacity>
+        }
+        {
+          !props.onlyBack && 
+          <>
+            <Image style={styles.logo} source={require('../assets/images/favicon.png')} />
+            <TouchableOpacity style={styles.container}>
+              <FontAwesome size={20} color={"#fff"} name="user" />
+              <Text style={styles.barText}>profil</Text>
+            </TouchableOpacity>
+          </>
+        }
       </View>
-      <View style={styles.bottom}>
+      {!props.onlyBack &&
+        <View style={styles.bottom}>
         <Search />
-      </View>
+        </View>
+      }
     </View>
   )
 }
@@ -61,6 +82,14 @@ const styles = StyleSheet.create({
     marginTop: 3,
     textAlign: 'center'
   },
+  barBackText: {
+    fontFamily: 'franklin-gothic',
+    fontSize: 10,
+    textTransform: 'uppercase',
+    color: "#353535",
+    marginTop: 3,
+    textAlign: 'center'
+  },
   container: {
     justifyContent: 'center',
     alignItems: 'center',
@@ -74,8 +103,17 @@ const styles = StyleSheet.create({
   backContainer: {
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: '#F5F5F5',
+    height: 65,
+    width: 65,
+    borderRadius: 15
+  },
+  backContainerEmpty: {
+    justifyContent: 'center',
+    alignItems: 'center',
     backgroundColor: 'transparent',
     height: 65,
     width: 65,
+    borderRadius: 15
   }
 })

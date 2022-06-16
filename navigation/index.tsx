@@ -19,6 +19,7 @@ import { AuthTabParamList, QuizzTabParamList, RootStackParamList, RootTabParamLi
 import LinkingConfiguration from './LinkingConfiguration';
 import { View } from '../components/Themed';
 import Page from '../screens/Terrain/Page';
+import Soon from '../screens/Soon';
 import Step1 from '../screens/Quizz/Step1';
 import Step2 from '../screens/Quizz/Step2';
 import Step3 from '../screens/Quizz/Step3';
@@ -27,6 +28,8 @@ import Login from '../screens/Auth/Login';
 import Register from '../screens/Auth/Register';
 import Terrain from '../screens/Terrain/Page';
 import Add from '../screens/Terrain/Add';
+import Picture from '../screens/Terrain/AddQuizz/Picture';
+import PictureValidation from '../screens/Terrain/AddQuizz/PictureValidation';
 
 import * as Store from 'expo-secure-store'
 import { AuthContext } from '../components/Context';
@@ -136,7 +139,11 @@ function RootNavigator() {
     return (
       <AddStack.Navigator>
         {(token) ?
-        <AddStack.Screen name='Add' component={Add} options={{headerShown: false}} />
+          <>
+            <AddStack.Screen name='Add' component={Add} options={{ headerShown: false }} />
+            <AddStack.Screen name='Picture' component={Picture} options={{ headerShown: false }} />
+            <AddStack.Screen name='PictureValidation' component={PictureValidation} options={{ headerShown: false }} />
+          </>
         : (<AddStack.Screen name='Auth' component={AuthNavigator} options={{headerShown: false}} />)}
       </AddStack.Navigator>
     )
@@ -179,12 +186,15 @@ function RootNavigator() {
           options={{
             headerShown: false, 
             tabBarShowLabel: false,
+            tabBarStyle: {
+              display: 'none'
+            },
             tabBarIcon: () => <TabBarIcon center={true} title="Ajouter" name="plus" color="#ffffff" />,
           }}
         />
         <BottomTab.Screen
           name="Tournois"
-          component={TabTwoScreen}
+          component={Soon}
           options={{
             headerShown: false, 
             tabBarShowLabel: false,
@@ -224,6 +234,7 @@ function QuizzNavigator() {
       <QuizzStack.Screen name='Step1' component={Step1} options={{headerShown: false}} />
       <QuizzStack.Screen name='Step2' component={Step2} options={{headerShown: false}} />
       <QuizzStack.Screen name='Step3' component={Step3} options={{headerShown: false}} />
+      <QuizzStack.Screen name='Step4' component={Step4} options={{headerShown: false}} />
     </QuizzStack.Navigator>
   )
 
