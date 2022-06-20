@@ -1,16 +1,71 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { SafeAreaView, ScrollView, StyleSheet } from 'react-native';
 import { Background } from '../components/Background';
 
 import EditScreenInfo from '../components/EditScreenInfo';
 import { Header } from '../components/Header';
 import { BigBox } from '../components/Terrains/BigBox';
+import { BigBoxLoading } from '../components/Terrains/BigBoxLoading';
 import { Box } from '../components/Terrains/Box';
+import { BoxLoading } from '../components/Terrains/BoxLoading';
 import { Title } from '../components/Texts/Title';
 import { Text, View } from '../components/Themed';
 import { RootTabScreenProps } from '../types';
 
+import * as Location from 'expo-location'
+
 export default function Terrain({ navigation }: RootTabScreenProps<'Terrains'>) {
+
+  const [errorLocation, setErrorLocation] = useState('')
+  const [areas, setAreas] = useState([])
+  const [areasComponent, setAreasComponent] = useState<JSX.Element[]>([])
+  const [location, setLocation] = useState<Location.LocationObject | null>(null)
+
+  const getLocation = async () => {
+    if (location) return;
+    let { status } = await Location.requestForegroundPermissionsAsync();
+    if (status !== 'granted') {
+      setErrorLocation('L\'accès à la localisation est requise');
+      return;
+    }
+
+    let currentLocation = await Location.getCurrentPositionAsync({});
+    setLocation(currentLocation);
+
+    let headers = new Headers();
+    headers.append("app-token", "LKauPZ7PSJ3Ze2NQpQGMgkjqPcesnjDR");
+    headers.append("Content-Type", "application/json");
+
+
+    const data = JSON.stringify({
+      longitude: currentLocation?.coords.longitude,
+      latitude: currentLocation?.coords.latitude,
+      distance: 10,
+    })
+
+    const options = {
+      method: 'POST',
+      headers: headers,
+      body: data
+    }
+
+    fetch("https://dev.govolley.fr/area/near", options)
+      .then(response => response.json())
+      .then((result) => {
+        setAreas(result)
+        let array = new Array();
+        result.forEach((area: undefined, i: number) => {
+          if (!area) return;
+          array.push(<Box key={i} navigation={navigation} area={area} location={currentLocation} ></Box>)
+        })
+        setAreasComponent(array)
+      })
+      .catch(error => console.log('error', error))
+  }
+
+  useEffect(() => {
+    getLocation()
+  })
 
   const [isScrolled, setScrolled] = useState(false);
 
@@ -22,18 +77,24 @@ export default function Terrain({ navigation }: RootTabScreenProps<'Terrains'>) 
       <Title style={{marginTop: 25}}>Proche de vous</Title>
         <ScrollView showsHorizontalScrollIndicator={false} style={styles.scrollView} horizontal={true}>
           <View style={styles.spacer}></View>
-          <Box navigation={navigation} id='test' distance={15} note={4.5} tags={['2 Terrains', 'Beach']} ></Box>
-          <Box navigation={navigation} id='test' distance={15} note={4.5} tags={['2 Terrains', 'Beach']} ></Box>
-          <Box navigation={navigation} id='test' distance={15} note={4.5} tags={['2 Terrains', 'Beach']} ></Box>
-          <Box navigation={navigation} id='test' distance={15} note={4.5} tags={['2 Terrains', 'Beach']} ></Box>
+          {
+            areas.length > 0 ? 
+              areasComponent
+              :
+              <>
+                <BoxLoading />
+                <BoxLoading />
+              </>
+          }
           <View style={styles.spacer}></View>
         </ScrollView>
         <Title>Tous les terrains</Title>
         <View style={styles.allContainter}>
+          {/* <BigBox id='test' distance={15} note={4.5} tags={['2 Terrains', 'Beach']} ></BigBox>
           <BigBox id='test' distance={15} note={4.5} tags={['2 Terrains', 'Beach']} ></BigBox>
           <BigBox id='test' distance={15} note={4.5} tags={['2 Terrains', 'Beach']} ></BigBox>
-          <BigBox id='test' distance={15} note={4.5} tags={['2 Terrains', 'Beach']} ></BigBox>
-          <BigBox id='test' distance={15} note={4.5} tags={['2 Terrains', 'Beach']} ></BigBox>
+          <BigBox id='test' distance={15} note={4.5} tags={['2 Terrains', 'Beach']} ></BigBox> */}
+          <BigBoxLoading />
         </View>
         </ScrollView>
     </View>

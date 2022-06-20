@@ -6,23 +6,53 @@ import { Image, StyleSheet, Text, Touchable, TouchableOpacity } from "react-nati
 import { RootStackParamList, RootStackScreenProps, RootTabParamList } from "../../types";
 import { View } from "../Themed";
 
+import { Buffer } from 'buffer'
+import { LocationObject } from "expo-location";
+
 export function Box(props: {
-  tags: Array<String>;
-  distance: number;
-  note: number;
-  id: string;
+  area: {
+    latitude: number,
+    longitude: number,
+    image_data: {
+      data: BinaryType
+    },
+    areas_nb: number,
+    surface: string
+  },
+  location: LocationObject,
   navigation: CompositeNavigationProp<BottomTabNavigationProp<RootTabParamList, "Terrains", undefined>, NativeStackNavigationProp<RootStackParamList>>;
 }) {
   
-  const calculateDistance = props['distance'] + ' km';
+  function distance(lat1: number, lon1: number, lat2: number, lon2: number) {
+    if ((lat1 == lat2) && (lon1 == lon2)) {
+      return 0;
+    }
+    else {
+      var radlat1 = Math.PI * lat1/180;
+      var radlat2 = Math.PI * lat2/180;
+      var theta = lon1-lon2;
+      var radtheta = Math.PI * theta/180;
+      var dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
+      if (dist > 1) {
+        dist = 1;
+      }
+      dist = Math.acos(dist);
+      dist = dist * 180/Math.PI;
+      dist = dist * 60 * 1.1515;
+      dist = dist * 1.609344
+      return dist.toFixed(1);
+    }
+  }
+
+  const calculateDistance = `${distance(props.area.latitude, props.area.longitude, props.location.coords.latitude, props.location.coords.longitude)} km`;
   const navigate = () => props.navigation.navigate('TerrainPage');
 
   return (
     <TouchableOpacity style={styles.content} onPress={navigate}>
       <View style={styles.contentImage}>
-        <Image style={styles.image} source={require('../../assets/images/terrains.jpg')} />
+        <Image style={styles.image} source={{ uri: 'data:image/png;base64,' + Buffer.from(props.area.image_data.data).toString('base64') }} />
         <View style={styles.tagContent}>
-          {props['tags'].map((tag, i) => 
+          {[`${props.area.areas_nb} Terrain(s)`, props.area.surface].map((tag, i) => 
             <Text style={styles.tag} key={i}>{tag}</Text>
           )}
         </View>
@@ -35,7 +65,7 @@ export function Box(props: {
           </View>
           <View style={styles.info}>
             <FontAwesome size={20} name='star' color='#ECA338' />
-            <Text style={styles.infoText}>{props['note']}</Text>
+            <Text style={styles.infoText}>10</Text>
           </View>
         </View>
         <View style={styles.see}>
