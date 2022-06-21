@@ -50,7 +50,7 @@ export function Box(props: {
   return (
     <TouchableOpacity style={styles.content} onPress={navigate}>
       <View style={styles.contentImage}>
-        <Image style={styles.image} source={{ uri: 'data:image/png;base64,' + Buffer.from(props.area.image_data.data).toString('base64') }} />
+        <Image style={styles.image} resizeMode='cover' resizeMethod="scale" source={{ uri: 'data:image/png;base64,' + Buffer.from(props.area.image_data.data).toString('base64') }} />
         <View style={styles.tagContent}>
           {[`${props.area.areas_nb} Terrain(s)`, props.area.surface].map((tag, i) => 
             <Text style={styles.tag} key={i}>{tag}</Text>
@@ -101,6 +101,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 25,
     borderTopRightRadius: 25,
     borderBottomLeftRadius: 25,
+    resizeMode: 'cover',
   },
   tagContent: {
     flexDirection: "row",
