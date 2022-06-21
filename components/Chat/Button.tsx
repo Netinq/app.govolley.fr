@@ -3,7 +3,7 @@ import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
 import { CompositeNavigationProp } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { Component } from "react";
-import { ActivityIndicator, GestureResponderEvent, StyleSheet, Text, TouchableOpacity, TouchableOpacityBase } from "react-native";
+import { ActivityIndicator, GestureResponderEvent, StyleSheet, Text, TouchableOpacity, TouchableOpacityBase, ViewStyle } from "react-native";
 import { QuizzTabParamList, RootStackParamList } from "../../types";
 
 type Props = {
@@ -12,6 +12,7 @@ type Props = {
   disable?: boolean,
   activity?: boolean,
   icon?: string,
+  style?: ViewStyle
 }
 
 export default class Button extends Component<Props> {
@@ -20,7 +21,7 @@ export default class Button extends Component<Props> {
 
     return (
       <TouchableOpacity
-        style={this.props.disable ? this.styles.button__disable : this.styles.button}
+        style={this.props.disable ? this.styles.button__disable : [this.styles.button, this.props.style]}
         onPress={this.props.disable || this.props.activity ? () => { } : this.props.onPress}
       >
         {!this.props.activity ?
