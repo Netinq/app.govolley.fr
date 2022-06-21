@@ -53,6 +53,10 @@ export default function PictureValidation({ navigation }: TerrainTabScreenProps<
 
   }
 
+  const next = () => {
+    navigation.navigate('Number')
+  }
+
   if (!picture) return null
   else return (
     <View style={styles.container}>
@@ -64,7 +68,7 @@ export default function PictureValidation({ navigation }: TerrainTabScreenProps<
         <Chat icon={true}>Est-ce que cette photo est cool ?</Chat>
         <ButtonBox>
           <ButtonColor text="Pas fou..." subText="(Refaire)" color="#FE5E79" onPress={takePicture} />
-          <ButtonColor text="Oui !" subText="(Valider)" color="#6EE37E" onPress={() => {}}/>
+          <ButtonColor text="Oui !" subText="(Valider)" color="#6EE37E" onPress={next}/>
         </ButtonBox>
       </ChatBox>
     </View>
