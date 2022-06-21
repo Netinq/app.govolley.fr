@@ -1,29 +1,37 @@
-import { QuizzTabParamList, RootStackParamList, TerrainTabScreenProps } from "../../../types";
-import { Image, StyleSheet, View } from "react-native";
+import { TerrainTabScreenProps } from "../../../types";
+import { StyleSheet, View } from "react-native";
 import { Background } from "../../../components/Background";
 import { Header } from "../../../components/Header";
 import { Title } from "../../../components/Texts/Title";
 import ChatBox from "../../../components/Chat/ChatBox";
 import Chat from "../../../components/Chat/Chat";
 import ButtonColor from "../../../components/Chat/ButtonColor";
-import Button from "../../../components/Chat/Button";
-import * as ImagePicker from 'expo-image-picker';
 
 import * as Store from 'expo-secure-store'
 import { useEffect, useState } from "react";
 import Layout from "../../../constants/Layout";
 import ButtonBox from "../../../components/Chat/ButtonBox";
 
-export default function PictureValidation({ navigation }: TerrainTabScreenProps<'PictureValidation'>) {
+export default function Surface({ navigation }: TerrainTabScreenProps<'Surface'>) {
 
-  const [picture, setPicture] = useState();
-  const [count, setCount] = useState(1);
+  const surfaces = [
+    {id: 1, name: 'Beach', color: '#FACC4D'},
+    {id: 2, name: 'Herbe', color: '#6EE37E'},
+    {id: 3, name: 'Beton', color: '#767676'},
+    {id: 4, name: 'Interieur', color: '#FF845F'},
+  ]
+
+  const [area, setArea] = useState("")
+  const surfacesComponents = new Array();
 
   useEffect(() => {
     async function loadData() {
       let area = await Store.getItemAsync('new_area');
       if (!area) return;
-      setPicture(JSON.parse(area).photo.uri)
+      surfaces.forEach((surface, i) => {
+        surfacesComponents.push(<ButtonColor key={i} text={surface.name} color={surface.color} onPress={() => next(surface.id)} />)
+      })
+      setArea(area);
     }
     loadData()
   });
@@ -32,43 +40,29 @@ export default function PictureValidation({ navigation }: TerrainTabScreenProps<
     navigation.goBack()
   }
 
-  const takePicture = async () => {
+  const next = async (surface_id: number) => {
 
-    let area = await Store.getItemAsync('new_area');
     if (!area) return;
-    
-    const json = JSON.parse(area)
+    let json = JSON.parse(area)
+    json.area_surface = surface_id;
 
-    let result = await ImagePicker.launchCameraAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 1,
-    });
-
-    json.photo = result;
-    
     await Store.setItemAsync('new_area', JSON.stringify(json))
-    setPicture(json.photo.uri)
-
+    navigation.navigate('Final')
   }
 
-  const next = () => {
-    navigation.navigate('Number')
-  }
-
-  if (!picture) return null
-  else return (
+  return (
     <View style={styles.container}>
       <Background />
       <Header onlyBack={true} backPress={cancel} customBack='annuler' />
       <Title style={{ marginTop: 25 }} big={true}>Ajouter un terrain</Title>
-      <Image source={{ uri: picture }} style={styles.picture} />
       <ChatBox style={{ marginTop: 25 }}>
-        <Chat icon={true}>Est-ce que cette photo est cool ?</Chat>
+        <Chat icon={true}>De quel type de surface s'agit-il ?</Chat>
         <ButtonBox>
-          <ButtonColor text="Pas fou..." subText="(Refaire)" color="#FE5E79" onPress={takePicture} />
-          <ButtonColor text="Oui !" subText="(Valider)" color="#6EE37E" onPress={next}/>
+          {
+            surfaces.map((surface, i) => 
+              <ButtonColor key={i} text={surface.name} color={surface.color} onPress={() => next(surface.id)} />
+            )
+          }
         </ButtonBox>
       </ChatBox>
     </View>

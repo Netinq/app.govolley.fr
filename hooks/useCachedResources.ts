@@ -1,17 +1,40 @@
 import { FontAwesome } from '@expo/vector-icons';
 import * as Font from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
+import * as Store from 'expo-secure-store'
+import { AuthContext } from "../components/Context";
 
 export default function useCachedResources() {
   const [isLoadingComplete, setLoadingComplete] = useState(false);
-
+  
   // Load any resources or data that we need prior to rendering the app
   useEffect(() => {
     async function loadResourcesAndDataAsync() {
       try {
         SplashScreen.preventAutoHideAsync();
 
+        const userToken = await Store.getItemAsync('jwt')
+        let headers = new Headers();
+        headers.append("app-token", "LKauPZ7PSJ3Ze2NQpQGMgkjqPcesnjDR");
+        headers.append("user-token", userToken || "");
+        headers.append("Content-Type", "application/json");
+      
+        const options = {
+          method: 'GET',
+          headers: headers,
+        }
+      
+        fetch("https://dev.govolley.fr/auth/checkToken", options)
+          .then(response => response.json())
+          .then(async (result) => {
+            if (result.error) {
+              const { logout } = useContext(AuthContext);
+              logout()
+            }
+          })
+          .catch(error => console.log('error', error))
+        
         // Load fonts
         await Font.loadAsync({
           ...FontAwesome.font,

@@ -57,6 +57,9 @@ export type TerrainTabParamList = {
   Add: undefined;
   Picture: undefined;
   PictureValidation: undefined;
+  Final: undefined;
+  Number: undefined;
+  Surface: undefined;
 };
   
 export type TerrainTabScreenProps<Screen extends keyof TerrainTabParamList> = CompositeScreenProps<

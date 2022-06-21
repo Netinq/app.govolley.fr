@@ -13,13 +13,16 @@ import { Text, View } from '../components/Themed';
 import { RootTabScreenProps } from '../types';
 
 import * as Location from 'expo-location'
+import { BoxEmpty } from '../components/Terrains/BoxEmpty';
 
 export default function Terrain({ navigation }: RootTabScreenProps<'Terrains'>) {
 
   const [errorLocation, setErrorLocation] = useState('')
+  const [load, setLoad] = useState(true)
   const [areas, setAreas] = useState([])
   const [areasComponent, setAreasComponent] = useState<JSX.Element[]>([])
   const [location, setLocation] = useState<Location.LocationObject | null>(null)
+  const [isScrolled, setScrolled] = useState(false);
 
   const getLocation = async () => {
     if (location) return;
@@ -59,6 +62,7 @@ export default function Terrain({ navigation }: RootTabScreenProps<'Terrains'>) 
           array.push(<Box key={i} navigation={navigation} area={area} location={currentLocation} ></Box>)
         })
         setAreasComponent(array)
+        setLoad(false)
       })
       .catch(error => console.log('error', error))
   }
@@ -67,7 +71,6 @@ export default function Terrain({ navigation }: RootTabScreenProps<'Terrains'>) 
     getLocation()
   })
 
-  const [isScrolled, setScrolled] = useState(false);
 
   return (
     <View style={styles.container}>
@@ -78,8 +81,11 @@ export default function Terrain({ navigation }: RootTabScreenProps<'Terrains'>) 
         <ScrollView showsHorizontalScrollIndicator={false} style={styles.scrollView} horizontal={true}>
           <View style={styles.spacer}></View>
           {
-            areas.length > 0 ? 
-              areasComponent
+            !load ? 
+              areas.length > 0 ?
+                areasComponent
+                :
+                <BoxEmpty onPress={() => {navigation.navigate('Ajouter')}} />
               :
               <>
                 <BoxLoading />

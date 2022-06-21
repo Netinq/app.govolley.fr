@@ -12,18 +12,18 @@ import * as ImagePicker from 'expo-image-picker';
 import * as Store from 'expo-secure-store'
 import { useEffect, useState } from "react";
 import Layout from "../../../constants/Layout";
-import ButtonBox from "../../../components/Chat/ButtonBox";
+import NumberInput from "../../../components/Chat/NumberInput";
 
-export default function PictureValidation({ navigation }: TerrainTabScreenProps<'PictureValidation'>) {
+export default function Number({ navigation }: TerrainTabScreenProps<'Number'>) {
 
-  const [picture, setPicture] = useState();
   const [count, setCount] = useState(1);
+  const [area, setArea] = useState("")
 
   useEffect(() => {
     async function loadData() {
       let area = await Store.getItemAsync('new_area');
       if (!area) return;
-      setPicture(JSON.parse(area).photo.uri)
+      setArea(area);
     }
     loadData()
   });
@@ -32,44 +32,27 @@ export default function PictureValidation({ navigation }: TerrainTabScreenProps<
     navigation.goBack()
   }
 
-  const takePicture = async () => {
+  const next = async () => {
 
-    let area = await Store.getItemAsync('new_area');
     if (!area) return;
-    
-    const json = JSON.parse(area)
+    let json = JSON.parse(area)
+    json.areas_nb = count;
 
-    let result = await ImagePicker.launchCameraAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 1,
-    });
-
-    json.photo = result;
-    
     await Store.setItemAsync('new_area', JSON.stringify(json))
-    setPicture(json.photo.uri)
-
+    navigation.navigate('Surface')
   }
 
-  const next = () => {
-    navigation.navigate('Number')
-  }
-
-  if (!picture) return null
-  else return (
+  return (
     <View style={styles.container}>
       <Background />
       <Header onlyBack={true} backPress={cancel} customBack='annuler' />
       <Title style={{ marginTop: 25 }} big={true}>Ajouter un terrain</Title>
-      <Image source={{ uri: picture }} style={styles.picture} />
       <ChatBox style={{ marginTop: 25 }}>
-        <Chat icon={true}>Est-ce que cette photo est cool ?</Chat>
-        <ButtonBox>
-          <ButtonColor text="Pas fou..." subText="(Refaire)" color="#FE5E79" onPress={takePicture} />
-          <ButtonColor text="Oui !" subText="(Valider)" color="#6EE37E" onPress={next}/>
-        </ButtonBox>
+        <Chat icon={true}>Combien de terrain y a-t-il ?</Chat>
+        <Chat noText={true} reverse={true} style={{justifyContent: 'center', flexDirection: 'row'}}>
+          <NumberInput count={count} setCount={setCount} />
+        </Chat>
+        <Button style={{marginTop: 25}} text="Suivant" onPress={next}/>
       </ChatBox>
     </View>
   )

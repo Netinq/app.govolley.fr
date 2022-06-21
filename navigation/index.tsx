@@ -33,6 +33,9 @@ import PictureValidation from '../screens/Terrain/AddQuizz/PictureValidation';
 
 import * as Store from 'expo-secure-store'
 import { AuthContext } from '../components/Context';
+import Number from '../screens/Terrain/AddQuizz/Number';
+import Surface from '../screens/Terrain/AddQuizz/Surface';
+import Final from '../screens/Terrain/AddQuizz/Final';
 
 export default function Navigation() {
 
@@ -103,9 +106,11 @@ function RootNavigator() {
         
         return;
       },
-      logout: (data: string) => {
-        setToken("")
-        return;
+      logout: () => {
+        Store.deleteItemAsync('jwt').then(() => {
+          setToken("")
+          return;
+        })
       },
     }),
     []
@@ -143,6 +148,9 @@ function RootNavigator() {
             <AddStack.Screen name='Add' component={Add} options={{ headerShown: false }} />
             <AddStack.Screen name='Picture' component={Picture} options={{ headerShown: false }} />
             <AddStack.Screen name='PictureValidation' component={PictureValidation} options={{ headerShown: false }} />
+            <AddStack.Screen name='Number' component={Number} options={{ headerShown: false }} />
+            <AddStack.Screen name='Surface' component={Surface} options={{ headerShown: false }} />
+            <AddStack.Screen name='Final' component={Final} options={{ headerShown: false }} />
           </>
         : (<AddStack.Screen name='Auth' component={AuthNavigator} options={{headerShown: false}} />)}
       </AddStack.Navigator>
@@ -166,7 +174,6 @@ function RootNavigator() {
             left: 0, 
             right: 0
           },
-          tabBarHideOnKeyboard: true,
           tabBarButton: props => <TouchableOpacity {...props} />,
           tabBarActiveTintColor: '#FCB040',
           tabBarInactiveTintColor: '#C9C9C9',

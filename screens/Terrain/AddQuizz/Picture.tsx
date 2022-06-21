@@ -8,6 +8,7 @@ import Chat from "../../../components/Chat/Chat";
 import ButtonColor from "../../../components/Chat/ButtonColor";
 import Button from "../../../components/Chat/Button";
 import * as ImagePicker from 'expo-image-picker';
+import * as Location from 'expo-location'
 
 import * as Store from 'expo-secure-store'
 
@@ -31,9 +32,14 @@ export default function Picture({ navigation }: TerrainTabScreenProps<'Picture'>
       quality: 1,
     });
 
+    const location = await Location.getCurrentPositionAsync();
+
     json.photo = result;
+    json.latitude = location.coords.latitude
+    json.longitude = location.coords.longitude
     
     Store.setItemAsync('new_area', JSON.stringify(json)).then(() => navigation.navigate('PictureValidation'))
+
 
   }
 
