@@ -6,7 +6,9 @@ import * as Store from 'expo-secure-store'
 import { AuthContext } from "../components/Context";
 
 export default function useCachedResources() {
+  
   const [isLoadingComplete, setLoadingComplete] = useState(false);
+  const { logout } = useContext(AuthContext);
   
   // Load any resources or data that we need prior to rendering the app
   useEffect(() => {
@@ -29,7 +31,6 @@ export default function useCachedResources() {
           .then(response => response.json())
           .then(async (result) => {
             if (result.error) {
-              const { logout } = useContext(AuthContext);
               logout()
             }
           })
