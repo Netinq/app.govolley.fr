@@ -40,7 +40,7 @@ export default function TerrainPage({ navigation, route }: TerrainTabScreenProps
   }
 
   useEffect(() => {
-    getArea()
+    if (!area) getArea()
   })
 
   const uuid = route.params.area_uuid
