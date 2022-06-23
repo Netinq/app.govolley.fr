@@ -1,23 +1,59 @@
 import { FontAwesome, FontAwesome5 } from "@expo/vector-icons";
-import { Image, StyleSheet, Text } from "react-native";
+import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
+import { CompositeNavigationProp } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { LocationObject } from "expo-location";
+import { Image, StyleSheet, Text, TouchableOpacity } from "react-native";
 import Layout from "../../constants/Layout";
+import { RootStackParamList, RootTabParamList } from "../../types";
 import { View } from "../Themed";
+import { Buffer } from 'buffer'
 
 export function BigBox(props: {
-  tags: Array<String>;
-  distance: number;
-  note: number;
-  id: string;
+  area: {
+    area_uuid: undefined,
+    latitude: number,
+    longitude: number,
+    image_data: {
+      data: BinaryType
+    },
+    areas_nb: number,
+    surface: string
+  },
+  location: LocationObject,
+  navigation: CompositeNavigationProp<BottomTabNavigationProp<RootTabParamList, "Home", undefined>, NativeStackNavigationProp<RootStackParamList>>;
 }) {
   
-  const calculateDistance = props['distance'] + ' km';
+  function distance(lat1: number, lon1: number, lat2: number, lon2: number) {
+    if ((lat1 == lat2) && (lon1 == lon2)) {
+      return 0;
+    }
+    else {
+      var radlat1 = Math.PI * lat1/180;
+      var radlat2 = Math.PI * lat2/180;
+      var theta = lon1-lon2;
+      var radtheta = Math.PI * theta/180;
+      var dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
+      if (dist > 1) {
+        dist = 1;
+      }
+      dist = Math.acos(dist);
+      dist = dist * 180/Math.PI;
+      dist = dist * 60 * 1.1515;
+      dist = dist * 1.609344
+      return dist.toFixed(1);
+    }
+  }
+
+  const calculateDistance = `${distance(props.area.latitude, props.area.longitude, props.location.coords.latitude, props.location.coords.longitude)} km`;
+  const navigate = () => props.navigation.navigate('Terrains', {screen: 'TerrainPage', params:{area_uuid: props.area.area_uuid}});
 
   return (
-    <View style={styles.content}>
+    <TouchableOpacity style={styles.content} onPress={navigate}>
       <View style={styles.contentImage}>
-        <Image style={styles.image} source={require('../../assets/images/terrains.jpg')} />
+        <Image style={styles.image} resizeMode='cover' resizeMethod="scale" source={{ uri: 'data:image/png;base64,' + Buffer.from(props.area.image_data.data).toString('base64') }} />
         <View style={styles.tagContent}>
-          {props['tags'].map((tag, i) => 
+          {[`${props.area.areas_nb} Terrain(s)`, props.area.surface].map((tag, i) => 
             <Text style={styles.tag} key={i}>{tag}</Text>
           )}
         </View>
@@ -30,7 +66,7 @@ export function BigBox(props: {
           </View>
           <View style={styles.info}>
             <FontAwesome size={20} name='star' color='#ECA338' />
-            <Text style={styles.infoText}>{props['note']}</Text>
+            <Text style={styles.infoText}>10</Text>
           </View>
         </View>
         <View style={styles.see}>
@@ -38,7 +74,7 @@ export function BigBox(props: {
           <Text style={styles.seeText}>Voir</Text>
         </View>
       </View>
-    </View>
+    </TouchableOpacity>
   )
 }
 

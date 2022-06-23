@@ -15,7 +15,7 @@ const linking: LinkingOptions<RootStackParamList> = {
     screens: {
       Root: {
         screens: {
-          Terrains: '/'
+          Home: '/'
         },
       },
       TerrainPage: '/terrainpage',
@@ -27,9 +27,9 @@ const linking: LinkingOptions<RootStackParamList> = {
           Step4: '/quizz/step4'
         },
       },
-      Terrain: {
+      Terrains: {
         screens: {
-          Terrain: '/terrain/{uuid}',
+          TerrainPage: '/terrain/{uuid}',
           Add: {
             screens: {
               Add: '/terrain/add',

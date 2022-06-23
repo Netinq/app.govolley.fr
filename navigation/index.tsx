@@ -13,12 +13,9 @@ import * as SecureStore from 'expo-secure-store'
 
 import ModalScreen from '../screens/ModalScreen';
 import NotFoundScreen from '../screens/NotFoundScreen';
-import Terrains from '../screens/Terrains';
-import TabTwoScreen from '../screens/TabTwoScreen';
 import { AuthTabParamList, QuizzTabParamList, RootStackParamList, RootTabParamList, RootTabScreenProps, TerrainTabParamList } from '../types';
 import LinkingConfiguration from './LinkingConfiguration';
 import { View } from '../components/Themed';
-import Page from '../screens/Terrain/Page';
 import Soon from '../screens/Soon';
 import Step1 from '../screens/Quizz/Step1';
 import Step2 from '../screens/Quizz/Step2';
@@ -26,7 +23,6 @@ import Step3 from '../screens/Quizz/Step3';
 import Step4 from '../screens/Quizz/Step4';
 import Login from '../screens/Auth/Login';
 import Register from '../screens/Auth/Register';
-import Terrain from '../screens/Terrain/Page';
 import Add from '../screens/Terrain/Add';
 import Picture from '../screens/Terrain/AddQuizz/Picture';
 import PictureValidation from '../screens/Terrain/AddQuizz/PictureValidation';
@@ -36,6 +32,8 @@ import { AuthContext } from '../components/Context';
 import Number from '../screens/Terrain/AddQuizz/Number';
 import Surface from '../screens/Terrain/AddQuizz/Surface';
 import Final from '../screens/Terrain/AddQuizz/Final';
+import Home from '../screens/Home';
+import TerrainPage from '../screens/Terrain/TerrainPage';
 
 export default function Navigation() {
 
@@ -132,7 +130,7 @@ function RootNavigator() {
 
     return (
       <TerrainStack.Navigator>
-        <TerrainStack.Screen name='Terrain' component={Terrain} options={{ headerShown: false }} />
+        <TerrainStack.Screen name="TerrainPage" component={TerrainPage} options={{ headerShown: false }} />
         <TerrainStack.Screen name='Add' component={AddNavigator} options={{ headerShown: false }} />
         <TerrainStack.Screen name='Auth' component={AuthNavigator}  options={{ headerShown: false }} />
       </TerrainStack.Navigator>
@@ -180,12 +178,12 @@ function RootNavigator() {
         }}
         >
         <BottomTab.Screen
-          name='Terrains'
-          component={Terrains}
-          options={({ navigation }: RootTabScreenProps<'Terrains'>) => ({
+          name='Home'
+          component={Home}
+          options={({ navigation }: RootTabScreenProps<'Home'>) => ({
             headerShown: false, 
             tabBarShowLabel: false,
-            tabBarIcon: ({color}) => <TabBarIcon title="Terrains" name="volleyball-ball" color={color}/>,
+            tabBarIcon: ({color}) => <TabBarIcon title="Home" name="volleyball-ball" color={color}/>,
           })}
         />
         <BottomTab.Screen
@@ -221,9 +219,7 @@ function RootNavigator() {
         {(!isRegistered && (<Stack.Screen name="Quizz" component={QuizzNavigator} options={{ headerShown: false }} />))}
         <Stack.Screen name="Root" component={BottomTabNavigator} options={{ headerShown: false }} />
         {!token && <Stack.Screen name="Auth" component={AuthNavigator} options={{ headerShown: false }} />}
-        <Stack.Screen name="Terrain" component={TerrainNavigator} options={{ headerShown: false }} />
-
-        <Stack.Screen name="TerrainPage" component={Page} options={{ headerShown: false }} />
+        <Stack.Screen name="Terrains" component={TerrainNavigator} options={{ headerShown: false }} />
         <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: 'Oops!' }} />
         <Stack.Group screenOptions={{ presentation: 'modal' }}>
           <Stack.Screen name="Modal" component={ModalScreen} />
