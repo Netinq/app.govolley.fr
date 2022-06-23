@@ -39,8 +39,8 @@ export default function Add({ navigation }: TerrainTabScreenProps<'Add'>) {
         <Chat icon={true}>Tiens ! Je te revois enfin ? Pour ajouter un terrain c'est très simple.</Chat>
         <Chat>Veux-tu répertorier un terrain publique ou veux-tu signaler la présence de ton terrain ?</Chat>
         <ButtonBox>
-          <ButtonColor text="Mon terrain" subText="(Ephémère)" color="#74C6F6" onPress={() => {}} disable={true} />
-          <ButtonColor text="Terrain publique" color="#F674C2" onPress={pressPublic}/>
+          <ButtonColor subText="(Ephémère)" color="#74C6F6" onPress={() => {}} disable={true}>Mon terrain</ButtonColor>
+          <ButtonColor color="#F674C2" onPress={pressPublic}>Terrain publique</ButtonColor>
         </ButtonBox>
       </ChatBox>
     </View>

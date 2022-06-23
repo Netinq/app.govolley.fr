@@ -12,7 +12,7 @@ import { Title } from '../components/Texts/Title';
 import { Text, View } from '../components/Themed';
 import { RootTabScreenProps } from '../types';
 
-export default function Terrain({ navigation }: RootTabScreenProps<'Terrains'>) {
+export default function Terrain({ navigation }: RootTabScreenProps<'Home'>) {
 
   return (
     <View style={styles.container}>

@@ -43,9 +43,9 @@ export default function Step3({ navigation }: QuizzTabScreenProps<'Step3'>) {
         <Chat icon={true}>Dans ma jeunesse je jouais à haut niveau..</Chat>
         <Chat>Comment estimerais-tu ton niveau ?</Chat>
         <ButtonBox>
-          <ButtonColor text='Fort' subText='(Amateur)' color='#74C6F6' onPress={async () => onPress(1)} />
-          <ButtonColor text='Très fort' subText='(Confirmé)' color='#7074FF' onPress={async () => onPress(1)} />
-          <ButtonColor text='Super fort' subText='(Compétiteur)' color='#FE5E79' onPress={async () => onPress(1)} />
+          <ButtonColor subText='(Amateur)' color='#74C6F6' onPress={async () => onPress(1)}>Fort</ButtonColor>
+          <ButtonColor subText='(Confirmé)' color='#7074FF' onPress={async () => onPress(1)}>Très fort</ButtonColor>
+          <ButtonColor subText='(Compétiteur)' color='#FE5E79' onPress={async () => onPress(1)}>Super fort</ButtonColor>
         </ButtonBox>
       </ChatBox>
     </ScrollView>

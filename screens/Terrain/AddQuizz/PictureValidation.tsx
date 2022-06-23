@@ -67,8 +67,8 @@ export default function PictureValidation({ navigation }: TerrainTabScreenProps<
       <ChatBox style={{ marginTop: 25 }}>
         <Chat icon={true}>Est-ce que cette photo est cool ?</Chat>
         <ButtonBox>
-          <ButtonColor text="Pas fou..." subText="(Refaire)" color="#FE5E79" onPress={takePicture} />
-          <ButtonColor text="Oui !" subText="(Valider)" color="#6EE37E" onPress={next}/>
+          <ButtonColor subText="(Refaire)" color="#FE5E79" onPress={takePicture}>Pas fou...</ButtonColor>
+          <ButtonColor subText="(Valider)" color="#6EE37E" onPress={next}>Oui !</ButtonColor>
         </ButtonBox>
       </ChatBox>
     </View>
