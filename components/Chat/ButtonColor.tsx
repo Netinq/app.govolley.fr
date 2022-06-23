@@ -3,7 +3,6 @@ import { GestureResponderEvent, StyleSheet, Text, TouchableOpacity, TouchableOpa
 import Layout from "../../constants/Layout";
 
 type Props = {
-  text: string,
   subText?: string,
   color: string,
   onPress: (event: GestureResponderEvent) => void,
@@ -19,7 +18,7 @@ export default class ButtonColor extends Component<Props> {
       <TouchableOpacity
         style={this.props.disable ? this.styles.button__disable : [this.styles.button, this.props.style]}
         onPress={this.props.disable ? () => { } : this.props.onPress}>
-        <Text style={this.styles.text}>{this.props.text}</Text>
+        <Text style={this.styles.text}>{this.props.children}</Text>
         {this.props.subText && <Text style={this.styles.subText}>{this.props.subText}</Text>}
       </TouchableOpacity>
     )

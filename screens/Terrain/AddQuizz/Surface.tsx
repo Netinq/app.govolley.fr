@@ -29,7 +29,7 @@ export default function Surface({ navigation }: TerrainTabScreenProps<'Surface'>
       let area = await Store.getItemAsync('new_area');
       if (!area) return;
       surfaces.forEach((surface, i) => {
-        surfacesComponents.push(<ButtonColor key={i} text={surface.name} color={surface.color} onPress={() => next(surface.id)} />)
+        surfacesComponents.push(<ButtonColor key={i} color={surface.color} onPress={() => next(surface.id)}>{surface.name}</ButtonColor>)
       })
       setArea(area);
     }
@@ -60,7 +60,7 @@ export default function Surface({ navigation }: TerrainTabScreenProps<'Surface'>
         <ButtonBox>
           {
             surfaces.map((surface, i) => 
-              <ButtonColor key={i} text={surface.name} color={surface.color} onPress={() => next(surface.id)} />
+              <ButtonColor key={i} color={surface.color} onPress={() => next(surface.id)}>{surface.name}</ButtonColor>
             )
           }
         </ButtonBox>

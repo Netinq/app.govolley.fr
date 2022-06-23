@@ -1,4 +1,4 @@
-import { TerrainTabScreenProps } from "../../../types";
+import { RootStackParamList, RootTabScreenProps, TerrainTabScreenProps } from "../../../types";
 import { Image, StyleSheet, Text, View } from "react-native";
 import { Background } from "../../../components/Background";
 import { Header } from "../../../components/Header";
@@ -12,7 +12,7 @@ import Layout from "../../../constants/Layout";
 import Button from "../../../components/Chat/Button";
 import * as ImageManipulator from 'expo-image-manipulator'
 
-export default function Final({ navigation }: TerrainTabScreenProps<'Final'>) {
+export default function Final({ navigation }: RootTabScreenProps<'Home'>) {
 
   const [picture, setPicture] = useState("")
   const [areas_nb, setAreas_nb] = useState(0)
@@ -79,7 +79,7 @@ export default function Final({ navigation }: TerrainTabScreenProps<'Final'>) {
 
     fetch("https://dev.govolley.fr/area", options)
       .then(response => response.text())
-      .then((result) => navigation.navigate('Root'))
+      .then((result) => navigation.navigate('Home'))
       .catch(error => console.log('error', error))
   }
 
