@@ -10,17 +10,19 @@ import { Box } from '../components/Terrains/Box';
 import { BoxLoading } from '../components/Terrains/BoxLoading';
 import { Title } from '../components/Texts/Title';
 import { Text, View } from '../components/Themed';
-import { RootTabScreenProps } from '../types';
+import { RootTabScreenProps, TerrainTabParamList } from '../types';
 
 import * as Location from 'expo-location'
 import { BoxEmpty } from '../components/Terrains/BoxEmpty';
+import { useNavigation } from '@react-navigation/native';
 
-export default function Terrain({ navigation }: RootTabScreenProps<'Terrains'>) {
+export default function Home({ navigation }: RootTabScreenProps<'Home'>) {
 
   const [errorLocation, setErrorLocation] = useState('')
   const [load, setLoad] = useState(true)
   const [areas, setAreas] = useState([])
   const [areasComponent, setAreasComponent] = useState<JSX.Element[]>([])
+  const [areasBigComponent, setAreasBigComponent] = useState<JSX.Element[]>([])
   const [location, setLocation] = useState<Location.LocationObject | null>(null)
   const [isScrolled, setScrolled] = useState(false);
 
@@ -56,12 +58,15 @@ export default function Terrain({ navigation }: RootTabScreenProps<'Terrains'>) 
       .then(response => response.json())
       .then((result) => {
         setAreas(result)
-        let array = new Array();
+        let array = new Array(); 
+        let arrayBig = new Array(); 
         result.forEach((area: undefined, i: number) => {
           if (!area) return;
-          array.push(<Box key={i} navigation={navigation} area={area} location={currentLocation} ></Box>)
+          array.push(<Box key={i} navigation={navigation} area={area} location={currentLocation} />)
+          arrayBig.push(<BigBox key={i} navigation={navigation} area={area} location={currentLocation} />)
         })
         setAreasComponent(array)
+        setAreasBigComponent(arrayBig)
         setLoad(false)
       })
       .catch(error => console.log('error', error))
@@ -96,11 +101,17 @@ export default function Terrain({ navigation }: RootTabScreenProps<'Terrains'>) 
         </ScrollView>
         <Title>Tous les terrains</Title>
         <View style={styles.allContainter}>
-          {/* <BigBox id='test' distance={15} note={4.5} tags={['2 Terrains', 'Beach']} ></BigBox>
-          <BigBox id='test' distance={15} note={4.5} tags={['2 Terrains', 'Beach']} ></BigBox>
-          <BigBox id='test' distance={15} note={4.5} tags={['2 Terrains', 'Beach']} ></BigBox>
-          <BigBox id='test' distance={15} note={4.5} tags={['2 Terrains', 'Beach']} ></BigBox> */}
-          <BigBoxLoading />
+          {
+            !load ? 
+              areas.length > 0 ?
+                areasBigComponent
+                :
+                <BoxEmpty onPress={() => {navigation.navigate('Ajouter')}} />
+              :
+              <>
+                <BigBoxLoading />
+              </>
+          }
         </View>
         </ScrollView>
     </View>

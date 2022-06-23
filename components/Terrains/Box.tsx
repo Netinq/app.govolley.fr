@@ -1,9 +1,9 @@
 import { FontAwesome, FontAwesome5 } from "@expo/vector-icons";
-import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
-import { CompositeNavigationProp, useNavigation } from "@react-navigation/native";
+import { BottomTabNavigationProp, BottomTabScreenProps } from "@react-navigation/bottom-tabs";
+import { CompositeNavigationProp, RouteProp, useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { Image, StyleSheet, Text, Touchable, TouchableOpacity } from "react-native";
-import { RootStackParamList, RootStackScreenProps, RootTabParamList } from "../../types";
+import { RootStackParamList, RootStackScreenProps, RootTabParamList, RootTabScreenProps, TerrainTabParamList, TerrainTabScreenProps } from "../../types";
 import { View } from "../Themed";
 
 import { Buffer } from 'buffer'
@@ -11,6 +11,7 @@ import { LocationObject } from "expo-location";
 
 export function Box(props: {
   area: {
+    area_uuid: undefined,
     latitude: number,
     longitude: number,
     image_data: {
@@ -20,7 +21,7 @@ export function Box(props: {
     surface: string
   },
   location: LocationObject,
-  navigation: CompositeNavigationProp<BottomTabNavigationProp<RootTabParamList, "Terrains", undefined>, NativeStackNavigationProp<RootStackParamList>>;
+  navigation: CompositeNavigationProp<BottomTabNavigationProp<RootTabParamList, "Home", undefined>, NativeStackNavigationProp<RootStackParamList>>;
 }) {
   
   function distance(lat1: number, lon1: number, lat2: number, lon2: number) {
@@ -45,7 +46,7 @@ export function Box(props: {
   }
 
   const calculateDistance = `${distance(props.area.latitude, props.area.longitude, props.location.coords.latitude, props.location.coords.longitude)} km`;
-  const navigate = () => props.navigation.navigate('TerrainPage');
+  const navigate = () => props.navigation.navigate('Terrains', {screen: 'TerrainPage', params:{area_uuid: props.area.area_uuid}});
 
   return (
     <TouchableOpacity style={styles.content} onPress={navigate}>
