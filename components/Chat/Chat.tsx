@@ -14,7 +14,7 @@ export default class Chat extends Component<Props> {
 
     return (
       <View style={this.props.reverse ? this.styles.chatReverse : [this.styles.chat, this.props.style]}>
-        {this.props.icon && <Image style={this.styles.robot} source={require('../../assets/images/favicon.png')} />}
+        {this.props.icon && <Image style={this.styles.robot} source={require('../../assets/images/perso.png')} />}
         {
           (!this.props.noText) ?
         <Text style={this.styles.text}>{this.props.children}</Text>
@@ -34,7 +34,8 @@ export default class Chat extends Component<Props> {
       borderRadius: 15,
       borderTopLeftRadius: 0,
       width: '100%',
-      marginBottom: 25
+      marginBottom: 25,
+      marginTop: this.props.icon ? 15 : 0
     },
     chatReverse: {
       paddingHorizontal: 35,
@@ -52,10 +53,10 @@ export default class Chat extends Component<Props> {
     },
     robot: {
       position: 'absolute',
-      top: -15,
-      left: -25,
-      height: 50,
-      width: 50,
+      top: -25,
+      left: -32,
+      height: 65,
+      width: 65,
       zIndex: 100
     }
   })
