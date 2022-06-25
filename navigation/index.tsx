@@ -37,35 +37,6 @@ import TerrainPage from '../screens/Terrain/TerrainPage';
 
 export default function Navigation() {
 
-  const { logout } = React.useContext(AuthContext);
-
-  const checkAuth = async () => {
-    const userToken = await Store.getItemAsync('jwt')
-    let headers = new Headers();
-    headers.append("app-token", "LKauPZ7PSJ3Ze2NQpQGMgkjqPcesnjDR");
-    headers.append("user-token", userToken || "");
-    headers.append("Content-Type", "application/json");
-  
-    const options = {
-      method: 'GET',
-      headers: headers,
-    }
-  
-    fetch("https://dev.govolley.fr/auth/checkToken", options)
-      .then(response => response.json())
-      .then(async (result) => {
-        if (result.error) {
-          logout()
-        }
-      })
-      .catch(error => console.log('error', error))
-  }
-
-  React.useEffect(() => {
-    checkAuth()
-  })
-
-
   return (
     <NavigationContainer
       linking={LinkingConfiguration}>
@@ -166,15 +137,40 @@ function RootNavigator() {
     []
   );
 
-  React.useEffect(() => {
-    async function isRegister() {
-      try {
-        await SecureStore.getItemAsync('jwt').then((data) => data && setToken(data))
-        if (await SecureStore.getItemAsync('isRegistered')) setRegistered(true);
-      } finally {
-        setLoadingComplete(true)
-      }
+  const isRegister = async () => {
+    try {
+      const jwt = await SecureStore.getItemAsync('jwt');
+      if (jwt) setToken(jwt)
+      if (await SecureStore.getItemAsync('isRegistered')) setRegistered(true);
+    } finally {
+      setLoadingComplete(true)
     }
+  }
+
+  const checkAuth = async () => {
+    const userToken = await Store.getItemAsync('jwt')
+    let headers = new Headers();
+    headers.append("app-token", "LKauPZ7PSJ3Ze2NQpQGMgkjqPcesnjDR");
+    headers.append("user-token", userToken || "");
+    headers.append("Content-Type", "application/json");
+  
+    const options = {
+      method: 'GET',
+      headers: headers,
+    }
+  
+    fetch("https://dev.govolley.fr/auth/checkToken", options)
+      .then(response => response.json())
+      .then(async (result) => {
+        if (result.error) {
+          authContext.logout()
+        }
+      })
+      .catch(error => console.log('error', error))
+  }
+
+  React.useEffect(() => {
+    checkAuth()
     isRegister()
   }, []);
 
@@ -193,7 +189,7 @@ function RootNavigator() {
   
     return (
       <AddStack.Navigator>
-        {(token.length <= 0) ?
+        {(token.length > 0) ?
           <>
             <AddStack.Screen name='Add' component={Add} options={{ headerShown: false }} />
             <AddStack.Screen name='Picture' component={Picture} options={{ headerShown: false }} />
