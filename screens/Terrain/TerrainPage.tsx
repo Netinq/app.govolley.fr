@@ -1,6 +1,6 @@
 import { ParamListBase, RouteProp, useRoute } from '@react-navigation/native';
-import { useEffect, useState } from 'react';
-import { Image, Linking, Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { useEffect, useRef, useState } from 'react';
+import { Animated, Image, Linking, Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Background } from '../../components/Background';
 import { Header } from '../../components/Header';
 import { TerrainTabScreenProps } from '../../types';
@@ -37,7 +37,8 @@ export default function TerrainPage({ navigation, route }: TerrainTabScreenProps
       data: []}
   });
 
-  
+  const fadeAnim = useRef(new Animated.Value(0)).current
+
   function distance(lat1: number, lon1: number, lat2: number, lon2: number) {
     if ((lat1 == lat2) && (lon1 == lon2)) {
       return 0;
@@ -88,7 +89,29 @@ export default function TerrainPage({ navigation, route }: TerrainTabScreenProps
 
   useEffect(() => {
     if (area.area_uuid.length <= 0) getArea()
-  })
+    Animated.loop(
+      Animated.sequence([
+        Animated.timing(
+          fadeAnim,
+          {
+            toValue: 1,
+            duration: 750,
+            easing: v => v,
+            useNativeDriver: true,
+          }
+        ),
+        Animated.timing(
+          fadeAnim,
+          {
+            toValue: 0,
+            duration: 750,
+            easing: v => v,
+            useNativeDriver: true,
+          }
+        ),
+      ])
+    ).start()
+  }, [fadeAnim])
 
   const goBack = () => {
     navigation.goBack()
@@ -113,7 +136,25 @@ export default function TerrainPage({ navigation, route }: TerrainTabScreenProps
     if (url) Linking.openURL(url);
   }
 
-  if (!loaded) return null;
+  if (!loaded) return (
+    <View style={styles.container}>
+      <Animated.View style={[styles.image__loading, {opacity: fadeAnim}]}></Animated.View>
+      <Header onlyBack={true} backPress={goBack} customBack='annuler' />
+      <View style={styles.area}>
+        <Background second />
+        <Title noPadding>Caractéristiques</Title>
+        <Animated.View style={[styles.tagContent, {opacity: fadeAnim}]}>
+            <Text style={styles.tag__loading}></Text>
+            <Text style={styles.tag__loading}></Text>
+        </Animated.View>
+        <Title noPadding style={{marginTop: 25}}>Localisation</Title>
+        <View style={styles.adressContent}>
+          <Animated.View style={[styles.adress__loading, {opacity: fadeAnim}]}></Animated.View>
+          <Animated.View style={[styles.button__loading, {opacity: fadeAnim}]}></Animated.View>
+        </View>
+      </View>
+    </View>
+  );
   else return (
     <View style={styles.container}>
       <Image style={styles.image} resizeMode='cover' resizeMethod="scale" source={{ uri: 'data:image/png;base64,' + Buffer.from(area.image_data.data).toString('base64') }} />
@@ -156,6 +197,14 @@ const styles = StyleSheet.create({
     width: (Layout.window.width),
     height: ((Layout.window.width) * 0.75),
   },
+  image__loading: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: (Layout.window.width),
+    height: ((Layout.window.width) * 0.75),
+    backgroundColor: '#E9E9E9'
+  },
   area: {
     height: Layout.window.height - ((Layout.window.width) * 0.75) + 50,
     width: Layout.window.width,
@@ -184,6 +233,15 @@ const styles = StyleSheet.create({
     marginRight: 15,
     borderRadius: 25,
   },
+  tag__loading: {
+    fontSize: 18,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    backgroundColor: '#D9D9D9',
+    marginRight: 15,
+    borderRadius: 25,
+    width: 100
+  },
   adressContent: {
     marginTop: 25,
     flexDirection: "row",
@@ -198,6 +256,13 @@ const styles = StyleSheet.create({
     justifyContent: 'space-evenly',
     alignItems: 'center',
     backgroundColor: '#fff',
+    borderRadius: 25,
+  },
+  adress__loading: {
+    width: Layout.window.width - 50 - 65 - 25,
+    height: 65,
+    alignItems: 'center',
+    backgroundColor: '#D9D9D9',
     borderRadius: 25,
   },
   adressText: {
@@ -217,6 +282,16 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#FCB040',
+    borderTopLeftRadius: 15,
+    borderBottomLeftRadius: 15,
+    borderBottomRightRadius: 15,
+    height: 65,
+    width: 65,
+  },
+  button__loading: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#D9D9D9',
     borderTopLeftRadius: 15,
     borderBottomLeftRadius: 15,
     borderBottomRightRadius: 15,
