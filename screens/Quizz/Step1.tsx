@@ -10,6 +10,7 @@ import * as SecureStore from 'expo-secure-store'
 import { CompositeNavigationProp } from '@react-navigation/native';
 import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import ButtonText from '../../components/Chat/ButtonText';
 
 type Props = {
   navigation: CompositeNavigationProp<BottomTabNavigationProp<QuizzTabParamList>, NativeStackNavigationProp<RootStackParamList>>
@@ -17,6 +18,7 @@ type Props = {
 
 export default class Step1 extends Component<Props> {
   
+  login = () => {this.props.navigation.navigate('Auth', {screen: 'Login'})}
   navigate = () => { this.props.navigation.navigate('Quizz', { screen: 'Step2' }); }
 
   render() {
@@ -29,9 +31,9 @@ export default class Step1 extends Component<Props> {
         <Title style={{ marginTop: 25 }} big={true}>Bienvenue</Title>
         <ChatBox style={{ marginTop: 25 }}>
           <Chat icon={true}>Salut ! J'aurai quelques questions rapides à te poser !</Chat>
-          <Chat>Les informations seront stockées uniquement sur ton téléphone.</Chat>
-          <Chat>Jusqu'à ce que tu décide de créer un compte.</Chat>
-          <Button text='Allons-y' onPress={this.navigate} />
+          <Chat>Les informations seront stockées uniquement sur ton téléphone jusqu'à ce que tu décide de créer un compte.</Chat>
+          <ButtonText onPress={this.login} text="J'ai déjà un compte" />
+          <Button style={{marginTop: 25}} text='Allons-y' onPress={this.navigate} />
         </ChatBox>
       </View>
     );
