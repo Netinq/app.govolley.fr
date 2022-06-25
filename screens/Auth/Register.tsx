@@ -1,5 +1,5 @@
 import { Component, useContext, useState } from "react";
-import { Image, StyleSheet, View } from "react-native";
+import { Image, Linking, StyleSheet, Text, TouchableHighlight, View } from "react-native";
 import { Background } from "../../components/Background";
 import Button from "../../components/Chat/Button";
 import ChatBox from "../../components/Chat/ChatBox";
@@ -8,6 +8,7 @@ import { Subtitle } from "../../components/Texts/Subtitle";
 import { Title } from "../../components/Texts/Title";
 import { AuthTabScreenProps } from "../../types";
 
+import CheckBox from 'expo-checkbox'
 import * as Store from 'expo-secure-store'
 
 import { AuthContext } from "../../components/Context";
@@ -17,6 +18,7 @@ export default function Register({ navigation }: AuthTabScreenProps<'Register'>)
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [isChecked, setChecked] = useState(false);
   const [activity, setActivity] = useState(false)
 
   const { register } = useContext(AuthContext);
@@ -52,9 +54,16 @@ export default function Register({ navigation }: AuthTabScreenProps<'Register'>)
       <ChatBox style={{marginTop: 25}}>
         <ChatInput placeholder="Mon email..." inputValue={email} setInputValue={setEmail}></ChatInput>
         <ChatInput placeholder="Mon mot de passe..." inputValue={password} setInputValue={setPassword} secureTextEntry={true}></ChatInput>
-        <View style={{justifyContent: 'space-between', flexDirection: 'row', width: '100%', alignItems: 'center'}}>
+        <View style={{ justifyContent: 'flex-start', flexDirection: 'row', width: '100%', alignItems: 'center' }}>
+          <CheckBox
+            value={isChecked}
+            onValueChange={setChecked}
+            />
+            <Text style={styles.rgpd}>J'accepte la <Text style={[styles.rgpd, styles.rgpd__link]} onPress={() => Linking.openURL('https://sarquentin.fr/govolley')}>politique de confidentialité</Text></Text>
+        </View>
+        <View style={{ justifyContent: 'space-between', flexDirection: 'row', width: '100%', alignItems: 'center', marginTop: 15 }}>
         <ButtonText text="J'ai déjà un compte ?" onPress={toLogin} />
-        <Button text="Créer" disable={(!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email) || password.length <= 6)} onPress={submit} activity={activity} />
+        <Button text="Créer" disable={(!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email) || password.length <= 6 || !isChecked)} onPress={submit} activity={activity} />
         </View>
       </ChatBox>
     </View>
@@ -79,5 +88,19 @@ const styles = StyleSheet.create({
   logo: {
     height: 150,
     width: 150
+  },
+  rgpd: {
+    color: '#353535',
+    fontFamily: 'franklin-gothic-medium',
+    fontSize: 15,
+    marginLeft: 5
+  },
+  rgpd__link: {
+    color: '#FCB040',
+    fontFamily: 'franklin-gothic-medium',
+    fontSize: 15,
+    textDecorationStyle: 'solid',
+    textDecorationLine: 'underline',
+    textDecorationColor: '#FCB040'
   }
 });
