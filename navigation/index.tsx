@@ -5,7 +5,7 @@
  */
 import { FontAwesome5 } from '@expo/vector-icons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/native';
+import { NavigationContainer, DefaultTheme, DarkTheme, useNavigation } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import * as React from 'react';
 import { StyleSheet, Text, TouchableOpacity } from 'react-native';
@@ -56,6 +56,8 @@ function RootNavigator() {
   const [isRegistered, setRegistered] = React.useState(false);
   const [token, setToken] = React.useState("");
 
+  const navigation = useNavigation()
+  
   const authContext = React.useMemo(
     () => ({
       register: (data: string) => {
@@ -87,7 +89,7 @@ function RootNavigator() {
         headers.append("app-token", "LKauPZ7PSJ3Ze2NQpQGMgkjqPcesnjDR");
         headers.append("Content-Type", "application/json");
 
-        const options = {
+        let options = {
           method: 'POST',
           headers: headers,
           body: data
@@ -96,8 +98,29 @@ function RootNavigator() {
         fetch("https://dev.govolley.fr/auth/login", options)
           .then(response => response.json())
           .then((result) => {
-            Store.setItemAsync('jwt', JSON.stringify(result.token)).then(() => {
+            Store.setItemAsync('jwt', JSON.stringify(result.token)).then(async () => {
               setToken(result.token)
+              if (await Store.getItemAsync('isRegistered')) return;
+              Store.setItemAsync('isRegistered', 'true').then(async () => {
+                if (await Store.getItemAsync('profil')) return;
+                headers.append("user-token", result.token);
+                options = {
+                  method: 'GET',
+                  headers: headers,
+                  body: ""
+                }
+                fetch("https://dev.govolley.fr/auth/", options)
+                  .then(response => response.json())
+                  .then((result) => {
+                    const profil = {
+                      nickname: result.nickname,
+                      born: result.age,
+                      level: result.level,
+                    }
+                    Store.setItemAsync('profil', JSON.stringify(profil)).then(() => navigation.navigate('Root'))
+                  })
+                  .catch(error => console.log('error', error))
+              })
             })
           })
           .catch(error => console.log('error', error))
