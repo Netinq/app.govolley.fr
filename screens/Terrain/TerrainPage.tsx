@@ -1,7 +1,18 @@
 import { ParamListBase, RouteProp, useRoute } from '@react-navigation/native';
 import { useEffect, useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { Image, Linking, Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Background } from '../../components/Background';
+import { Header } from '../../components/Header';
 import { TerrainTabScreenProps } from '../../types';
+import { Buffer } from 'buffer'
+import Layout from '../../constants/Layout';
+import { Title } from '../../components/Texts/Title';
+import * as Location from 'expo-location';
+import ButtonColor from '../../components/Chat/ButtonColor';
+import Button from '../../components/Chat/Button';
+import ButtonText from '../../components/Chat/ButtonText';
+import { FontAwesome } from '@expo/vector-icons';
+import * as Clipboard from 'expo-clipboard';
 
 type routeParams = {
   area_uuid: undefined;
@@ -9,6 +20,9 @@ type routeParams = {
 
 export default function TerrainPage({ navigation, route }: TerrainTabScreenProps<'TerrainPage'>) {
 
+  const [calculateDistance, setCalculateDistance] = useState("")
+  const [adress, setAdress] = useState("")
+  const [loaded, setLoaded] = useState(false)
   const [area, setArea] = useState({
     area_uuid: "",
     area_surface: 0,
@@ -16,9 +30,40 @@ export default function TerrainPage({ navigation, route }: TerrainTabScreenProps
     adress: "",
     latitude: 0,
     longitude: 0,
+    surface: {
+      name: ""
+    },
     image_data: {
       data: []}
   });
+
+  
+  function distance(lat1: number, lon1: number, lat2: number, lon2: number) {
+    if ((lat1 == lat2) && (lon1 == lon2)) {
+      return 0;
+    }
+    else {
+      var radlat1 = Math.PI * lat1/180;
+      var radlat2 = Math.PI * lat2/180;
+      var theta = lon1-lon2;
+      var radtheta = Math.PI * theta/180;
+      var dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
+      if (dist > 1) {
+        dist = 1;
+      }
+      dist = Math.acos(dist);
+      dist = dist * 180/Math.PI;
+      dist = dist * 60 * 1.1515;
+      dist = dist * 1.609344
+      return dist.toFixed(1);
+    }
+  }
+  
+  const getLocation = async (area: {latitude:0 ,longitude:0}) => {
+    let currentLocation = await Location.getCurrentPositionAsync({});
+    setCalculateDistance(`Localisation (${distance(area.latitude, area.longitude, currentLocation?.coords.latitude, currentLocation?.coords.longitude)} km)`)
+    setLoaded(true)
+  }
 
   const getArea = async () => {
 
@@ -35,6 +80,8 @@ export default function TerrainPage({ navigation, route }: TerrainTabScreenProps
       .then(response => response.json())
       .then((result) => {
         setArea(result)
+        setAdress(result.adress)
+        getLocation(result)
       })
       .catch(error => console.log('error', error))
   }
@@ -43,29 +90,141 @@ export default function TerrainPage({ navigation, route }: TerrainTabScreenProps
     if (area.area_uuid.length <= 0) getArea()
   })
 
-  const uuid = route.params.area_uuid
+  const goBack = () => {
+    navigation.goBack()
+  }
 
-  if (!area) return null;
+  const clipboard = async () => {
+    Clipboard.setStringAsync(area.adress)
+    setAdress('Copié !')
+    setTimeout(() => {
+      setAdress(area.adress)
+    }, 600);
+  }
+
+  const openMap = () => {
+    const scheme = Platform.select({ ios: 'maps:0,0?q=', android: 'geo:0,0?q=' });
+    const latLng = `${area.latitude},${area.longitude}`;
+    const label = 'Custom Label';
+    const url = Platform.select({
+      ios: `${scheme}${label}@${latLng}`,
+      android: `${scheme}${latLng}(${label})`
+    });
+    if (url) Linking.openURL(url);
+  }
+
+  if (!loaded) return null;
   else return (
     <View style={styles.container}>
-      <Text style={styles.title}>ID : {area.adress}</Text>
+      <Image style={styles.image} resizeMode='cover' resizeMethod="scale" source={{ uri: 'data:image/png;base64,' + Buffer.from(area.image_data.data).toString('base64') }} />
+      <Header onlyBack={true} backPress={goBack} customBack='annuler' />
+      <View style={styles.area}>
+        <Background second />
+        <Title noPadding>Caractéristiques</Title>
+        <View style={styles.tagContent}>
+          {[`${area.areas_nb} Terrain(s)`, area.surface.name].map((tag, i) => 
+            <Text style={styles.tag} key={i}>{tag}</Text>
+          )}
+        </View>
+        <Title noPadding style={{marginTop: 25}}>{calculateDistance}</Title>
+        <View style={styles.adressContent}>
+          <TouchableOpacity style={styles.adress} onPress={clipboard}>
+            <Image style={styles.infoIcon} source={require('../../assets/images/icon.png')} />
+            <Text style={styles.adressText}>{adress}</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.button} onPress={openMap}>
+            <FontAwesome size={20} color={"#fff"} name="map-marker" />
+            <Text style={styles.buttonText}>y aller</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
+    backgroundColor: '#F5F5F5',
     flex: 1,
-    alignItems: 'center',
     justifyContent: 'center',
+    alignItems: 'center',
   },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
+  image: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: (Layout.window.width),
+    height: ((Layout.window.width) * 0.75),
   },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: '80%',
+  area: {
+    height: Layout.window.height - ((Layout.window.width) * 0.75) + 50,
+    width: Layout.window.width,
+    position: 'absolute',
+    top: ((Layout.window.width) * 0.75) - 50,
+    left: 0,
+    borderTopLeftRadius: 50,
+    borderTopRightRadius: 50,
+    backgroundColor: '#fff',
+    overflow: 'hidden',
+    padding: 25
+  },
+  tagContent: {
+    marginTop: 25,
+    flexDirection: "row",
+    justifyContent: "flex-start",
+    backgroundColor: 'transparent'
+  },
+  tag: {
+    fontFamily: 'franklin-gothic-medium',
+    fontSize: 18,
+    color: '#fff',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    backgroundColor: '#FCB040',
+    marginRight: 15,
+    borderRadius: 25,
+  },
+  adressContent: {
+    marginTop: 25,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    backgroundColor: 'transparent',
+    width: '100%'
+  },
+  adress: {
+    width: Layout.window.width - 50 - 65 - 25,
+    height: 65,
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+    alignItems: 'center',
+    backgroundColor: '#fff',
+    borderRadius: 25,
+  },
+  adressText: {
+    width: '75%',
+    fontFamily: 'franklin-gothic-medium',
+    fontSize: 15,
+  },
+  buttonText: {
+    fontFamily: 'franklin-gothic',
+    fontSize: 10,
+    textTransform: 'uppercase',
+    color: "#fff",
+    marginTop: 3,
+    textAlign: 'center'
+  },
+  button: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#FCB040',
+    borderTopLeftRadius: 15,
+    borderBottomLeftRadius: 15,
+    borderBottomRightRadius: 15,
+    height: 65,
+    width: 65,
+  },
+  infoIcon: {
+    height: 50,
+    width: 50
   },
 });

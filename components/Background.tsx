@@ -2,11 +2,15 @@ import { Component, ElementType, PropsWithChildren, ReactPropTypes } from "react
 import { ImageBackground, StyleSheet } from "react-native";
 import Layout from "../constants/Layout";
 
-export class Background extends Component{
+type Props = {
+  second?: boolean
+}
+
+export class Background extends Component<Props>{
   
   render() {
     
-    const image = require('../assets/images/background.jpg');
+    const image = this.props.second ? require('../assets/images/backgroundSecond.png') : require('../assets/images/background.jpg');
     
     return (<ImageBackground source={image} resizeMode="cover" style={this.styles.style}></ImageBackground>
     );
