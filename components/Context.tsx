@@ -15,7 +15,7 @@ export const authContextDefaults: AuthContextInterface = {
   // isAuthenticated: false,
   login: (data) => null,
   register: (data) => null,
-  logout: () => null
+  logout: () => null,
 };
 
 export const AuthContext = React.createContext<AuthContextInterface>(
