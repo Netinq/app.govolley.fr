@@ -13,6 +13,8 @@ import Button from '../../components/Chat/Button';
 import ButtonText from '../../components/Chat/ButtonText';
 import { FontAwesome } from '@expo/vector-icons';
 import * as Clipboard from 'expo-clipboard';
+import { Subtitle } from '../../components/Texts/Subtitle';
+import moment from 'moment';
 
 type routeParams = {
   area_uuid: undefined;
@@ -22,6 +24,7 @@ export default function TerrainPage({ navigation, route }: TerrainTabScreenProps
 
   const [calculateDistance, setCalculateDistance] = useState("")
   const [adress, setAdress] = useState("")
+  const [endTime, setEndTime] = useState("")
   const [loaded, setLoaded] = useState(false)
   const [area, setArea] = useState({
     area_uuid: "",
@@ -34,7 +37,9 @@ export default function TerrainPage({ navigation, route }: TerrainTabScreenProps
       name: ""
     },
     image_data: {
-      data: []}
+      data: []
+    },
+    expired_at: null,
   });
 
   const fadeAnim = useRef(new Animated.Value(0)).current
@@ -82,6 +87,7 @@ export default function TerrainPage({ navigation, route }: TerrainTabScreenProps
       .then((result) => {
         setArea(result)
         setAdress(result.adress)
+        if (result.expired_at) setEndTime(`Disponible jusqu'à ${moment(result.expired_at).format("HH:mm")}`)
         getLocation(result)
       })
       .catch(error => console.log('error', error))
@@ -161,7 +167,8 @@ export default function TerrainPage({ navigation, route }: TerrainTabScreenProps
       <Header onlyBack={true} backPress={goBack} customBack='annuler' />
       <View style={styles.area}>
         <Background second />
-        <Title noPadding>Caractéristiques</Title>
+          {endTime && <Title noPadding>{endTime}</Title>}
+        <Title noPadding style={endTime ? {marginTop: 25} : {}}>Caractéristiques</Title>
         <View style={styles.tagContent}>
           {[`${area.areas_nb} Terrain(s)`, area.surface.name].map((tag, i) => 
             <Text style={styles.tag} key={i}>{tag}</Text>
