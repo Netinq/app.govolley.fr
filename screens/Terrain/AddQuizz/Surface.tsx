@@ -16,9 +16,9 @@ export default function Surface({ navigation }: TerrainTabScreenProps<'Surface'>
 
   const surfaces = [
     {id: 1, name: 'Beach', color: '#FACC4D'},
-    {id: 2, name: 'Herbe', color: '#6EE37E'},
-    {id: 3, name: 'Beton', color: '#767676'},
-    {id: 4, name: 'Interieur', color: '#FF845F'},
+    {id: 2, name: 'Interieur', color: '#FF845F'},
+    {id: 3, name: 'Herbe', color: '#6EE37E'},
+    {id: 4, name: 'Beton', color: '#767676'},
   ]
 
   const [area, setArea] = useState("")

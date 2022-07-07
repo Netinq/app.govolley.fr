@@ -11,27 +11,32 @@ import { useEffect, useState } from "react";
 import Layout from "../../../constants/Layout";
 import Button from "../../../components/Chat/Button";
 import * as ImageManipulator from 'expo-image-manipulator'
+import moment from "moment";
 
 export default function Final({ navigation }: RootTabScreenProps<'Home'>) {
 
   const [picture, setPicture] = useState("")
   const [areas_nb, setAreas_nb] = useState(0)
   const [area_surface, setArea_surface] = useState("")
+  const [endTime, setEndTime] = useState("")
   const [activity, setActivity] = useState(false)
   const [area, setArea] = useState('')
+  const [loaded, setLoaded] = useState(false)
 
-  const surfaces = ['sable', 'herbe', 'béton', 'interieur']
-
+  const surfaces = ['sable', 'interieur', 'herbe', 'beton']
+  
   useEffect(() => {
     async function loadData() {
       let area = await Store.getItemAsync('new_area');
       if (!area) return;
 
       const json = JSON.parse(area)
+      setEndTime(json.endTime)
       setPicture(json.photo.uri)
       setAreas_nb(json.areas_nb)
       setArea_surface(surfaces[json.area_surface - 1])
       setArea(area)
+      setLoaded(true)
     }
     loadData()
   });
@@ -60,11 +65,12 @@ export default function Final({ navigation }: RootTabScreenProps<'Home'>) {
       "longitude": json.longitude,
       "area_surface": json.area_surface,
       "areas_nb": json.areas_nb,
-      "image_data" : base64
+      "image_data": base64,
+      "expired_at": json.endTime || null
     }
     
     const userToken = await Store.getItemAsync('jwt')
-    const userTokenString = JSON.parse(userToken || "")
+    const userTokenString = userToken ? JSON.parse(userToken) : "";
 
     let headers = new Headers();
     headers.append("app-token", "LKauPZ7PSJ3Ze2NQpQGMgkjqPcesnjDR");
@@ -83,7 +89,7 @@ export default function Final({ navigation }: RootTabScreenProps<'Home'>) {
       .catch(error => console.log('error', error))
   }
 
-  if (!areas_nb || !picture || !area_surface) return null
+  if (!loaded) return null
   else return (
     <View style={styles.container}>
       <Background />
@@ -91,7 +97,7 @@ export default function Final({ navigation }: RootTabScreenProps<'Home'>) {
       <Title style={{ marginTop: 25 }} big={true}>Ajouter un terrain</Title>
       <Image source={{ uri: picture}} style={styles.picture} />
       <ChatBox style={{ marginTop: 25 }}>
-        <Chat icon={true}>Vous allez signaler la présence de <Text style={styles.bright}>{areas_nb} terrain{areas_nb > 1 ? 's':''}</Text> {area_surface == 'interieur' ? 'en':'sur'} <Text style={styles.bright}>{area_surface}</Text> situé{areas_nb > 1 ? 's':''} à votre <Text style={styles.bright}>emplacement actuel</Text>.</Chat>
+        <Chat icon={true}>Vous allez signaler la présence de <Text style={styles.bright}>{areas_nb} terrain{areas_nb > 1 ? 's':''}</Text> {area_surface == 'interieur' ? 'en':'sur'} <Text style={styles.bright}>{area_surface}</Text>{endTime && " jusqu'à" }{endTime && <Text style={styles.bright}>{moment(endTime).format('HH:mm')}</Text>} situé{areas_nb > 1 ? 's':''} à votre <Text style={styles.bright}>emplacement actuel</Text>.</Chat>
         <Button text="Tout est bon" activity={activity} onPress={publish} />
       </ChatBox>
     </View>
