@@ -54,6 +54,7 @@ export type QuizzTabScreenProps<Screen extends keyof QuizzTabParamList> = Compos
 export type TerrainTabParamList = {
   TerrainPage: {area_uuid: undefined};
   Auth: undefined;
+  Temp: undefined;
   Add: undefined;
   Picture: undefined;
   PictureValidation: undefined;

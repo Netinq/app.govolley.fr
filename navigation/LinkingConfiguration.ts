@@ -33,6 +33,7 @@ const linking: LinkingOptions<RootStackParamList> = {
           Add: {
             screens: {
               Add: '/terrain/add',
+              Temp: '/terrain/add/temp',
               Picture: '/terrain/add/picture',
               PictureValidation: '/terrain/add/pictureValidation',
               Surface: '/terrain/add/surface',
