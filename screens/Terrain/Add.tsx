@@ -26,9 +26,18 @@ export default function Add({ navigation }: TerrainTabScreenProps<'Add'>) {
     next()
   }
 
-  const next = () => {
-    navigation.navigate("Picture");
+  const pressTemp = async () => {
+
+    const area = {
+      type: 'temp'
+    }
+
+    await Store.setItemAsync('new_area', JSON.stringify(area))
+    nextTemp()
   }
+  
+  const next = () => navigation.navigate('Picture')
+  const nextTemp = () => navigation.navigate('Temp')
 
   return (
     <View style={styles.container}>
@@ -39,7 +48,7 @@ export default function Add({ navigation }: TerrainTabScreenProps<'Add'>) {
         <Chat icon={true}>Tiens ! Je te revois enfin ? Pour ajouter un terrain c'est très simple.</Chat>
         <Chat>Veux-tu répertorier un terrain publique ou veux-tu signaler la présence de ton terrain ?</Chat>
         <ButtonBox>
-          <ButtonColor subText="(Ephémère)" color="#74C6F6" onPress={() => {}} disable={true}>Mon terrain</ButtonColor>
+          <ButtonColor subText="(Ephémère)" color="#74C6F6" onPress={pressTemp}>Mon terrain</ButtonColor>
           <ButtonColor color="#F674C2" onPress={pressPublic}>Terrain publique</ButtonColor>
         </ButtonBox>
       </ChatBox>
