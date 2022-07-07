@@ -8,6 +8,7 @@ import Layout from "../../constants/Layout";
 import { RootStackParamList, RootTabParamList } from "../../types";
 import { View } from "../Themed";
 import { Buffer } from 'buffer'
+import moment from "moment";
 
 export function BigBox(props: {
   area: {
@@ -18,7 +19,8 @@ export function BigBox(props: {
       data: BinaryType
     },
     areas_nb: number,
-    surface: string
+    surface: string,
+    expired_at: Date,
   },
   location: LocationObject,
   navigation: CompositeNavigationProp<BottomTabNavigationProp<RootTabParamList, "Home", undefined>, NativeStackNavigationProp<RootStackParamList>>;
@@ -57,6 +59,9 @@ export function BigBox(props: {
             <Text style={styles.tag} key={i}>{tag}</Text>
           )}
         </View>
+        {props.area.expired_at && <View style={styles.temp}>
+            <FontAwesome5 size={20} name='clock' color='#FFFFFF' />
+        </View>}
       </View>
       <View style={styles.bar}>
         <View style={styles.infoBar}>
@@ -64,10 +69,18 @@ export function BigBox(props: {
             <Image style={styles.infoIcon} source={require('../../assets/images/icon.png')} />
             <Text style={styles.infoText}>{calculateDistance}</Text>
           </View>
-          <View style={styles.info}>
-            <FontAwesome size={20} name='star' color='#ECA338' />
-            <Text style={styles.infoText}>10</Text>
-          </View>
+          {
+            props.area.expired_at ?
+              <View style={styles.info}>
+                <FontAwesome5 size={20} name='clock' color='#ECA338' />
+                <Text style={styles.infoText}>{moment(props.area.expired_at).format('HH:mm')}</Text>
+              </View>
+              :
+              <View style={styles.info}>
+                <FontAwesome size={20} name='star' color='#ECA338' />
+                <Text style={styles.infoText}>10</Text>
+              </View>
+          }
         </View>
         <View style={styles.see}>
           <FontAwesome5 size={20} name='eye' color='#fff' />
@@ -85,6 +98,19 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     backgroundColor: '#fff',
     marginBottom: 15
+  },
+  temp: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    position: "absolute",
+    top: 0,
+    left: 0,
+    backgroundColor: '#263B91',
+    borderTopLeftRadius: 25,
+    borderBottomRightRadius: 25,
+    height: 45,
+    width: 45,
   },
   contentImage: {
     height: 175,

@@ -34,6 +34,7 @@ import Surface from '../screens/Terrain/AddQuizz/Surface';
 import Final from '../screens/Terrain/AddQuizz/Final';
 import Home from '../screens/Home';
 import TerrainPage from '../screens/Terrain/TerrainPage';
+import Temp from '../screens/Terrain/AddQuizz/Temp';
 
 export default function Navigation() {
 
@@ -149,11 +150,12 @@ function RootNavigator() {
 
   const checkAuth = async () => {
     const userToken = await Store.getItemAsync('jwt')
+    const userTokenString = userToken ? JSON.parse(userToken) : "";
     let headers = new Headers();
     headers.append("app-token", "LKauPZ7PSJ3Ze2NQpQGMgkjqPcesnjDR");
-    headers.append("user-token", userToken || "");
+    headers.append("user-token", userTokenString);
     headers.append("Content-Type", "application/json");
-  
+
     const options = {
       method: 'GET',
       headers: headers,
@@ -164,6 +166,7 @@ function RootNavigator() {
       .then(async (result) => {
         if (result.error) {
           authContext.logout()
+          console.log('ERROR TOKEN :'+userToken)
         }
       })
       .catch(error => console.log('error', error))
@@ -192,6 +195,7 @@ function RootNavigator() {
         {(token.length > 0) ?
           <>
             <AddStack.Screen name='Add' component={Add} options={{ headerShown: false }} />
+            <AddStack.Screen name='Temp' component={Temp} options={{ headerShown: false }} />
             <AddStack.Screen name='Picture' component={Picture} options={{ headerShown: false }} />
             <AddStack.Screen name='PictureValidation' component={PictureValidation} options={{ headerShown: false }} />
             <AddStack.Screen name='Number' component={Number} options={{ headerShown: false }} />
